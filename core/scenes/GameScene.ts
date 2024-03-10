@@ -1,8 +1,34 @@
+import { Game } from "../Game.js";
+import { Vector2 } from "../Utils/Vector2.js";
+import { Bullet } from "../objects/Bullet.js";
 import { Enemy } from "../objects/Enemy.js";
+import { GameObject } from "../objects/GameObject.js";
 import { Player } from "../objects/Player.js";
+import { Wall } from "../objects/Wall.js";
 import { Scene } from "./Scene.js";
 
 export class GameScene extends Scene{
+
+    //#region RATIO AUMENTO DIFFICOLTA'
+    
+    
+    //tempo per ogni livello
+    private secondsPerLevel: number = 30;
+
+    //Nemici massimi iniziali per riga 
+    private starMaxEnemiesPerRow = 1;
+
+    //Aumento di nemici massimi per riga per livello
+    private increaseEnemyRatio = 0.5;
+
+    //Velocità di tick iniziale
+    private startTickInterval = 5000;
+    
+    //Diminuzione velocità di tick per livello
+    private tickDecreaseRatio = 400;
+    
+    //#endregion
+
 
     //giocatore
     private player: Player | undefined;
@@ -14,9 +40,9 @@ export class GameScene extends Scene{
     private pressA: boolean = false;
 
     //nemici massimi per riga
-    private maxEnemyRowCount = 30;
+    private maxEnemyRowCount = 20;
     //nemici massimi per riga in questo momento
-    private currentEnemyRowCount = 0;
+    private currentEnemyRowCount = this.starMaxEnemiesPerRow;
     //posizioni di pawn dei nemici
     private arPositions: number[] = [];
 
@@ -27,43 +53,26 @@ export class GameScene extends Scene{
     private tickInterval: number | undefined;
     //puntatore al timer
     private intervalPtr: number | undefined;
-    //contatore di tick
-    private tickCounter: number = 0;
     //livello attuale
     private currentLevel: number = 1;
 
 
-    //#region RATIO AUMENTO DIFFICOLTA'
-
-    //Numero di tick per aumento livello
-    private tickPerLevel: number = 20
-
-    //Nemici massimi iniziali per riga 
-    private starMaxEnemiesPerRow = 5;
-
-    //Aumento di nemici massimi per riga per livello
-    private increaseEnemyRatio = 1;
-
-    //Velocità di tick iniziale
-    private startTickInterval = 4000;
-
-    //Diminuzione velocità di tick per livello
-    private tickDecreaseRatio = 200;
-
-    //#endregion
+    private bulletRatio: number = 300;
 
 
-    public update(): void {
+
+    public update() {
+        // console.log(this.arCollidables)
         if(this.pressA){
             this.player?.moveLeft()
         }
         else if(this.pressD){
             this.player?.moveRight();
         }
+        return super.update();
     }
-    public load(): void {
+    public load() {
 
-        this.currentEnemyRowCount = this.starMaxEnemiesPerRow;
 
         //creo l'array con le posizioni dei nemici
         this.initArPositions();
@@ -73,12 +82,39 @@ export class GameScene extends Scene{
 
         //creo il giocatore
         this.player = this.istantiateEl(Player);
+        this.player.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player.size.y/2 - 5))
+
+        //creo i muri
+        this.initWalls()
+
      
         // faccio partire il timer dei nemici
         this.setTick(this.startTickInterval);
+
+        //faccio partire il timer degli spari
+        setInterval(() => {
+            if(!!this.player){
+                const bullet = this.istantiateEl(Bullet);
+                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y/2 - bullet.size.y/2 - 2));
+            }
+        }, this.bulletRatio)
+
+        //faccio partire il timer per l'aumento livello
+        setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
     }
-    public unload(): void {
-        
+
+   
+    private initWalls(){
+        const wallUp = this.istantiateEl(Wall);
+        wallUp.setProperties("horizontal",this.gameController.mainCanvas.width, Vector2.create(this.gameController.mainCanvas.width/2, 5));
+        const wallDown = this.istantiateEl(Wall);
+        wallDown.setProperties("horizontal",this.gameController.mainCanvas.width, Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height - 5));
+    }
+    
+
+
+    public unload(){
+
     }
     
     /**
@@ -112,11 +148,10 @@ export class GameScene extends Scene{
     private initArPositions(): void{
 
         this.enemySample = new Enemy(this.gameController);
-        const enemySizeX = this.enemySample.size.x;
         delete this.enemySample
 
         const step = this.gameController.mainCanvas.width / this.maxEnemyRowCount;
-        const start = step/2 - enemySizeX/2;
+        const start = step/2;
         for (let index = 0; index < this.maxEnemyRowCount; index++) {
             this.arPositions.push(step * index + start);
             
@@ -135,7 +170,7 @@ export class GameScene extends Scene{
 
             const positionX = arPositionsCopy.splice(idx, 1);
             const enemyInstance = this.istantiateEl(Enemy);
-            enemyInstance.moveAt({x: positionX[0], y: enemyInstance.size.y});
+            enemyInstance.moveAtCentre(Vector2.create(positionX[0], enemyInstance.size.y /2 + 10));
             this.enemies.push(enemyInstance)
 
         }
@@ -148,10 +183,6 @@ export class GameScene extends Scene{
     private tick(_this: typeof this){
         _this.enemies.forEach(enemy => enemy.moveDown(enemy));
         _this.spawnEnemyRow();
-        this.tickCounter ++;
-        if(this.tickCounter / this.tickPerLevel > this.currentLevel){
-            this.increaseLevel();
-        }
     }
 
     /**
@@ -161,11 +192,13 @@ export class GameScene extends Scene{
     private setTick(tickInterval: number){
         if(tickInterval > 0){
             if(!!this.intervalPtr){
+                console.log("pulisco intervallo precedente")
                 clearInterval(this.intervalPtr);
             }
     
             this.tickInterval = tickInterval;
-            setInterval(() => this.tick(this), this.tickInterval);
+            console.log("Setto intervallo a, ", tickInterval)
+            this.intervalPtr = setInterval(() => this.tick(this), this.tickInterval);
         }
 
     }
@@ -185,6 +218,12 @@ export class GameScene extends Scene{
         else{
             this.currentEnemyRowCount = this.maxEnemyRowCount;
         }
+    }
+    public destroyEl(gameObj: GameObject): void {
+        if(gameObj instanceof Enemy){
+            this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 0)
+        }
+        super.destroyEl(gameObj);
     }
 
 }

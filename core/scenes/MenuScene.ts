@@ -1,14 +1,12 @@
 import { Scene } from "./Scene.js";
 
 export class MenuScene extends Scene{
-    public update(): void {
-        throw new Error("Method not implemented.");
+    public update() {
+        return super.update()
     }
-    public load(): void {
-        throw new Error("Method not implemented.");
+    public load() {
     }
-    public unload(): void {
-        throw new Error("Method not implemented.");
+    public unload() {
     }
 
 }

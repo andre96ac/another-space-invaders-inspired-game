@@ -1,30 +1,45 @@
 import { Game } from "../Game.js";
+import { Vector2 } from "../Utils/Vector2.js";
 import { GameObject } from "./GameObject.js";
 
 export class Player extends GameObject{
+    public onCollisionEnter(other: GameObject): void {
+    }
+    public update(): void {
+    
+    }
+    public load(): void {
+
+    }
+    public unload(): void {
+
+    }
+
+
 
     
-    private playerSpeed: number = 5;
+    private playerSpeed: number = 3;
 
     constructor(gameController: Game){
-        const playerSize = 20;
-        super(gameController, "rectangle", {x:gameController.mainCanvas.clientWidth/2, y:gameController.mainCanvas.clientHeight - playerSize}, {x: playerSize, y:playerSize});
+        const playerSize = 30;
+        super(gameController, "rectangle", Vector2.zero, Vector2.create(playerSize, playerSize));
     }
 
     public moveRight(){
-        if(this._position.x + this._size.x >= this.gameController.mainCanvas.width){
-            this._position.x = this.gameController.mainCanvas.width - this._size.x;
+        if(this.position.x + this._size.x >= this.gameController.mainCanvas.width){
+            this.position = Vector2.create(this.gameController.mainCanvas.width - this._size.x, this.position.y)
         }
         else{
-            this._position.x += this.playerSpeed;
+            this.position = Vector2.create(this.position.x + this.playerSpeed*this.gameController.deltaTime, this.position.y);
         }
     }
     public moveLeft(){
-        if(this._position.x - this.playerSpeed < 0){
-            this._position.x = 0
+        if(this.position.x - this.playerSpeed < 0){
+            this.position = Vector2.create(0, this.position.y)
         }
         else{
-            this._position.x -= this.playerSpeed;
+            this.position = Vector2.create(this.position.x - this.playerSpeed * this.gameController.deltaTime, this.position.y)
         }
     }
+    
 }

@@ -7,6 +7,13 @@ export class Game {
     ;
     get mainCanvas() { return this._mainCanvas; }
     ;
+    get currentScene() { return this._currentScene; }
+    ;
+    lastTimestamp = 0;
+    currentTimestamp = 0;
+    get deltaTime() {
+        return (this.currentTimestamp - this.lastTimestamp) / 6;
+    }
     constructor(canvas, context) {
         this._mainCanvas = canvas;
         this._mainContext = context;
@@ -14,21 +21,23 @@ export class Game {
     start() {
         this.mainContext.canvas.height = window.innerHeight - 20;
         this.mainContext.canvas.width = window.innerWidth - 15;
-        this.loadScene(new GameScene(this));
-        // setInterval(() =>{
-        //     this._currentScene?.update();
-        //     this._currentScene?.render();
-        // }, 0)
-        window.requestAnimationFrame(() => this.frame(this));
+        this.loadScene(GameScene);
+        window.requestAnimationFrame((timestamp) => this.frame(this, timestamp));
     }
-    frame(pthis) {
+    frame(pthis, timestamp) {
+        this.currentTimestamp = timestamp;
+        if (this.lastTimestamp == undefined) {
+            this.lastTimestamp = timestamp;
+        }
         this._currentScene?.update();
         this._currentScene?.render();
-        window.requestAnimationFrame(() => this.frame(pthis));
+        this._currentScene?.checkCollisions();
+        this.lastTimestamp = this.currentTimestamp;
+        window.requestAnimationFrame((timestamp) => this.frame(pthis, timestamp));
     }
-    loadScene(scene) {
+    loadScene(sceneFactory) {
         this._currentScene?.unload();
-        this._currentScene = scene;
+        this._currentScene = new sceneFactory(this);
         this._currentScene.load();
     }
 }

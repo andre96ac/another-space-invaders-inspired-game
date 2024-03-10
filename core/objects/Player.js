@@ -1,24 +1,33 @@
+import { Vector2 } from "../Utils/Vector2.js";
 import { GameObject } from "./GameObject.js";
 export class Player extends GameObject {
-    playerSpeed = 5;
+    onCollisionEnter(other) {
+    }
+    update() {
+    }
+    load() {
+    }
+    unload() {
+    }
+    playerSpeed = 3;
     constructor(gameController) {
-        const playerSize = 20;
-        super(gameController, "rectangle", { x: gameController.mainCanvas.clientWidth / 2, y: gameController.mainCanvas.clientHeight - playerSize }, { x: playerSize, y: playerSize });
+        const playerSize = 30;
+        super(gameController, "rectangle", Vector2.zero, Vector2.create(playerSize, playerSize));
     }
     moveRight() {
-        if (this._position.x + this._size.x >= this.gameController.mainCanvas.width) {
-            this._position.x = this.gameController.mainCanvas.width - this._size.x;
+        if (this.position.x + this._size.x >= this.gameController.mainCanvas.width) {
+            this.position = Vector2.create(this.gameController.mainCanvas.width - this._size.x, this.position.y);
         }
         else {
-            this._position.x += this.playerSpeed;
+            this.position = Vector2.create(this.position.x + this.playerSpeed * this.gameController.deltaTime, this.position.y);
         }
     }
     moveLeft() {
-        if (this._position.x - this.playerSpeed < 0) {
-            this._position.x = 0;
+        if (this.position.x - this.playerSpeed < 0) {
+            this.position = Vector2.create(0, this.position.y);
         }
         else {
-            this._position.x -= this.playerSpeed;
+            this.position = Vector2.create(this.position.x - this.playerSpeed * this.gameController.deltaTime, this.position.y);
         }
     }
 }
