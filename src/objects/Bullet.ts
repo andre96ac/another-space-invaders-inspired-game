@@ -1,7 +1,7 @@
-import { Game } from "../Game.js";
-import { Vector2 } from "../Utils/Vector2.js";
+import { Game } from "../core/Game.js";
+import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Enemy } from "./Enemy.js";
-import { GameObject } from "./GameObject.js";
+import { GameObject } from "../core/GameObject.js";
 
 export class Bullet extends GameObject{
     public onCollisionEnter(other: GameObject): void {
@@ -14,12 +14,12 @@ export class Bullet extends GameObject{
 
     private speed = 6;
 
-    public update(): void {
+    public onUpdate(): void {
         this.moveUp();
     }
-    public load(): void {
+    public onLoad(): void {
     }
-    public unload(): void {
+    public onUnload(): void {
     }
     constructor(gameController: Game){
         super(gameController, "circle", Vector2.zero, Vector2.create(6,6));

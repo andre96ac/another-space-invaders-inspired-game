@@ -1,6 +1,6 @@
-import { Game } from "../Game.js";
-import { Vector2 } from "../Utils/Vector2.js";
-import { GameObject } from "./GameObject.js";
+import { Game } from "../core/Game.js";
+import { Vector2 } from "../core/Helpers/Vector2.js";
+import { GameObject } from "../core/GameObject.js";
 
 export class Enemy extends GameObject{
 
@@ -11,11 +11,11 @@ export class Enemy extends GameObject{
     public onCollisionEnter(other: GameObject): void {
 
     }
-    public update(): void {
+    public onUpdate(): void {
     }
-    public load(): void {
+    public onLoad(): void {
     }
-    public unload(): void {
+    public onUnload(): void {
     }
 
 

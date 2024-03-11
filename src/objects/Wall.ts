@@ -1,8 +1,8 @@
-import { Game } from "../Game.js";
-import { Vector2 } from "../Utils/Vector2.js";
+import { Game } from "../core/Game.js";
+import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Bullet } from "./Bullet.js";
 import { Enemy } from "./Enemy.js";
-import { GameObject } from "./GameObject.js";
+import { GameObject } from "../core/GameObject.js";
 
 export class Wall extends GameObject{
     public onCollisionEnter(other: GameObject): void {
@@ -10,11 +10,11 @@ export class Wall extends GameObject{
             this.gameController.currentScene?.destroyEl(other);
         }
     }
-    public load(): void {
+    public onLoad(): void {
     }
-    public unload(): void {
+    public onUnload(): void {
     }
-    public update(): void {
+    public onUpdate(): void {
     }
 
     constructor(gameController: Game){
@@ -27,11 +27,11 @@ export class Wall extends GameObject{
         const thickness = 5;
         switch(orientation){
             case "horizontal":
-                this._size = Vector2.create(length, thickness);
+                this.size = Vector2.create(length, thickness);
                 this.moveAtCentre(position);
                 break;
                 case "vertical":
-                this._size = Vector2.create(thickness, length);
+                this.size = Vector2.create(thickness, length);
                 this.moveAtCentre(position);
                 break;
         }

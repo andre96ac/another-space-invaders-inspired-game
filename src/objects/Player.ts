@@ -1,17 +1,17 @@
-import { Game } from "../Game.js";
-import { Vector2 } from "../Utils/Vector2.js";
-import { GameObject } from "./GameObject.js";
+import { Game } from "../core/Game.js";
+import { Vector2 } from "../core/Helpers/Vector2.js";
+import { GameObject } from "../core/GameObject.js";
 
 export class Player extends GameObject{
     public onCollisionEnter(other: GameObject): void {
     }
-    public update(): void {
+    public onUpdate(): void {
     
     }
-    public load(): void {
+    public onLoad(): void {
 
     }
-    public unload(): void {
+    public onUnload(): void {
 
     }
 
@@ -26,8 +26,8 @@ export class Player extends GameObject{
     }
 
     public moveRight(){
-        if(this.position.x + this._size.x >= this.gameController.mainCanvas.width){
-            this.position = Vector2.create(this.gameController.mainCanvas.width - this._size.x, this.position.y)
+        if(this.position.x + this.size.x >= this.gameController.mainCanvas.width){
+            this.position = Vector2.create(this.gameController.mainCanvas.width - this.size.x, this.position.y)
         }
         else{
             this.position = Vector2.create(this.position.x + this.playerSpeed*this.gameController.deltaTime, this.position.y);
