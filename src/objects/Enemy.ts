@@ -2,6 +2,7 @@ import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
+import { PowerUp } from "./PowerUp.js";
 
 export class Enemy extends GameObject{
     public onMouseClick(ev: MouseEvent): void {
@@ -11,6 +12,8 @@ export class Enemy extends GameObject{
 
     private maxHealth = 3;
     private currentHealth = this.maxHealth;
+
+    private powerUpspawnPercentage = 0.05;
 
     public onCollisionEnter(other: GameObject): void {
 
@@ -33,7 +36,7 @@ export class Enemy extends GameObject{
         super(gameController, "rectangle", Vector2.zero, enemySize);
         this._enemyStep = this.size.x + 20
         this.collidable = true;
-        this.color = "white";
+        this.color = "rgb(255, 51, 153)";
 
     }
 
@@ -51,12 +54,24 @@ export class Enemy extends GameObject{
             this.currentHealth --;
         }
         else{
-            if(this.gameController.currentScene instanceof GameScene){
-                this.gameController.currentScene.incrementKillCount();
-            }
-            this.gameController.playAudioOneShot("explosion.wav")
-            this.destroy();
+            this.die()
         }
     }
+    
+    private die(){
+        if(this.gameController.currentScene instanceof GameScene){
+            this.gameController.currentScene.incrementKillCount();
+        }
+        this.gameController.playAudioOneShot("explosion.wav")
+        if(Math.random() < this.powerUpspawnPercentage){
+            this.spawnPowerUp();
+        }
+        this.destroy();
 
+    }
+
+    private spawnPowerUp(){
+        const powerUp = this.gameController.currentScene?.istantiateEl(PowerUp);
+        powerUp?.moveAtCentre(this.center);
+    }
 }

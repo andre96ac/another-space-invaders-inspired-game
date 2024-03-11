@@ -56,10 +56,6 @@ export class GameScene extends Scene{
     //livello attuale
     private currentLevel: number = 1;
 
-
-    //delay di spawn dei proiettili
-    private bulletRatio: number = 300;
-
     private killCount: number = 0;
 
 
@@ -92,16 +88,6 @@ export class GameScene extends Scene{
         // faccio partire il timer dei nemici
         this.setTick(this.startTickInterval);
 
-        //faccio partire il timer degli spari
-        setInterval(() => {
-            if(!!this.player){
-                const bullet = this.istantiateEl(Bullet);
-                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y/2 - bullet.size.y/2));
-                if(!this.gameController.paused){
-                    this.gameController.playAudioOneShot("shoot.wav")
-                }
-            }
-        }, this.bulletRatio)
 
         //faccio partire il timer per l'aumento livello
         setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
