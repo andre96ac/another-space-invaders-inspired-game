@@ -4,6 +4,8 @@ import { Enemy } from "./Enemy.js";
 import { GameObject } from "../core/GameObject.js";
 
 export class Bullet extends GameObject{
+    public onMouseClick(ev: MouseEvent): void {
+    }
     public onCollisionEnter(other: GameObject): void {
         if(other instanceof Enemy){
             other.hit();
@@ -24,6 +26,7 @@ export class Bullet extends GameObject{
     constructor(gameController: Game){
         super(gameController, "circle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
+        this.color = "white"
     }
 
 

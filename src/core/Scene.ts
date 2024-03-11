@@ -15,6 +15,9 @@ export abstract class Scene{
         return this.gameObjList.filter(el => el.collidable)
     }
 
+    public get arButtons(): GameObject[]{
+        return this.gameObjList.filter(el => el.button);
+    }
 
    
 
@@ -90,9 +93,19 @@ export abstract class Scene{
          && (el.position.x < el2.position.x? (el2.position.x - el.position.x) < el.size.x : (el.position.x - el2.position.x) < el2.size.x)
     }
 
-    public drawBackground(imagePath: string){
 
+    /**
+     * called when a mouse click event is called; notify OnMouseClick event to gameObject overlapping pointer
+     */
+    public checkButtonClick(ev: MouseEvent): Symbol{
+        console.log(ev);
+        this.arButtons
+                        .filter(button => (ev.clientX > button.position.x && ev.clientX < button.position.x + button.size.x)&&(ev.clientY > button.position.y && ev.clientY < button.position.y + button.size.y))
+                        .forEach(el => el.onMouseClick(ev))
+        return Symbol("this method should not be overriden");
     }
+
+
 
 
 

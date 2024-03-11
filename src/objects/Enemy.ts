@@ -4,6 +4,9 @@ import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
 
 export class Enemy extends GameObject{
+    public onMouseClick(ev: MouseEvent): void {
+
+    }
 
 
     private maxHealth = 3;
@@ -30,6 +33,7 @@ export class Enemy extends GameObject{
         super(gameController, "rectangle", Vector2.zero, enemySize);
         this._enemyStep = this.size.x + 20
         this.collidable = true;
+        this.color = "white";
 
     }
 

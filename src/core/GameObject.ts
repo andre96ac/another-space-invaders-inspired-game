@@ -27,6 +27,11 @@ export abstract class GameObject{
     private _collidable: boolean = false;
     public get collidable(): boolean{ return  this._collidable }
     protected set collidable(value: boolean){ this._collidable = value }
+    
+    //Button (set true to notify onMouseClickEvent)
+    private _button: boolean = false;
+    public get button(): boolean{ return  this._button }
+    protected set button(value: boolean){ this._button = value }
 
     //hidden
     private _hidden: boolean = false;
@@ -63,7 +68,7 @@ export abstract class GameObject{
 
 
     //color of obj
-    protected color: string = "white";
+    protected color: string = "black";
     //Shape
     private shape: ShapeType;
     //Filled
@@ -100,6 +105,7 @@ export abstract class GameObject{
                     break;
 
                 case "triangle":
+                    //#FIXME La posizione y non sembra giusta
                         context.beginPath();
                         context.moveTo(this.position.x, this.position.y);
                         context.lineTo(this.position.x + this.size.x, this.position.y);
@@ -151,7 +157,9 @@ export abstract class GameObject{
      * Called every Frame if this is colliding with other collidable gameObject
      * @param other Other GameObject colliding
      */
-    public abstract onCollisionEnter(other: GameObject): void
+    public abstract onCollisionEnter(other: GameObject): void;
+
+    public abstract onMouseClick(ev: MouseEvent): void;
 
     /**
      * Called at the gameObject creation

@@ -98,6 +98,8 @@ export abstract class Game{
         this.htmlAudioLoop = document.createElement("audio");
         this.htmlAudioLoop.loop = true;
 
+        //Setup mouse click check
+        this.mainCanvas.addEventListener("click", (ev) => this.currentScene?.checkButtonClick(ev))
 
     }
     
@@ -111,6 +113,8 @@ export abstract class Game{
         if(this.animationCallstackRef == undefined){
             //start rendering loop
             this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp));
+
+
 
             //Loading firs scene
             this.onStart()

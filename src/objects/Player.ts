@@ -3,6 +3,8 @@ import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 
 export class Player extends GameObject{
+    public onMouseClick(ev: MouseEvent): void {
+    }
     public onCollisionEnter(other: GameObject): void {
     }
     public onUpdate(): void {
@@ -23,6 +25,7 @@ export class Player extends GameObject{
     constructor(gameController: Game){
         const playerSize = 30;
         super(gameController, "triangle", Vector2.zero, Vector2.create(playerSize, playerSize));
+        this.color = "white"
     }
 
     public moveRight(){
