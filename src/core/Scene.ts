@@ -98,9 +98,8 @@ export abstract class Scene{
      * called when a mouse click event is called; notify OnMouseClick event to gameObject overlapping pointer
      */
     public checkButtonClick(ev: MouseEvent): Symbol{
-        console.log(ev);
         this.arButtons
-                        .filter(button => (ev.clientX > button.position.x && ev.clientX < button.position.x + button.size.x)&&(ev.clientY > button.position.y && ev.clientY < button.position.y + button.size.y))
+                        .filter(button => (ev.offsetX > button.position.x && ev.offsetX < button.position.x + button.size.x)&&(ev.offsetY > button.position.y && ev.offsetY < button.position.y + button.size.y))
                         .forEach(el => el.onMouseClick(ev))
         return Symbol("this method should not be overriden");
     }

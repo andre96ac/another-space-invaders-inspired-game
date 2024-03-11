@@ -65,7 +65,6 @@ export class GameScene extends Scene{
 
 
     public onUpdate() {
-        // console.log(this.arCollidables)
         if(this.pressA){
             this.player?.moveLeft()
         }
@@ -97,7 +96,7 @@ export class GameScene extends Scene{
         setInterval(() => {
             if(!!this.player){
                 const bullet = this.istantiateEl(Bullet);
-                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y - bullet.size.y/2 - 10));
+                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y/2 - bullet.size.y/2));
                 if(!this.gameController.paused){
                     this.gameController.playAudioOneShot("shoot.wav")
                 }
