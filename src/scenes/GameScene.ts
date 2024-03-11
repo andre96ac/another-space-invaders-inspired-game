@@ -82,12 +82,11 @@ export class GameScene extends Scene{
 
         //creo il giocatore
         this.player = this.istantiateEl(Player);
-        this.player.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player.size.y/2 - 5))
+        this.player.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player.size.y/2 - 10))
 
         //creo i muri
         this.initWalls()
 
-     
         // faccio partire il timer dei nemici
         this.setTick(this.startTickInterval);
 
@@ -95,12 +94,15 @@ export class GameScene extends Scene{
         setInterval(() => {
             if(!!this.player){
                 const bullet = this.istantiateEl(Bullet);
-                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y/2 - bullet.size.y/2 - 2));
+                bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y - bullet.size.y/2 - 10));
             }
         }, this.bulletRatio)
 
         //faccio partire il timer per l'aumento livello
         setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
+
+        //disegno lo sfondo
+        this.gameController.drawBackground("background.png");
     }
 
    

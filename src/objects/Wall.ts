@@ -21,10 +21,12 @@ export class Wall extends GameObject{
         super(gameController, "rectangle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
         this.hidden = false;
+        this.color = "white";
+        this.fill = true;
     }
 
     public setProperties(orientation: "horizontal" | "vertical", length: number, position: Vector2){
-        const thickness = 5;
+        const thickness = 2;
         switch(orientation){
             case "horizontal":
                 this.size = Vector2.create(length, thickness);

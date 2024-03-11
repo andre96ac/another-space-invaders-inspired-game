@@ -22,7 +22,7 @@ export class Player extends GameObject{
 
     constructor(gameController: Game){
         const playerSize = 30;
-        super(gameController, "rectangle", Vector2.zero, Vector2.create(playerSize, playerSize));
+        super(gameController, "triangle", Vector2.zero, Vector2.create(playerSize, playerSize));
     }
 
     public moveRight(){

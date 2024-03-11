@@ -90,6 +90,10 @@ export abstract class Scene{
          && (el.position.x < el2.position.x? (el2.position.x - el.position.x) < el.size.x : (el.position.x - el2.position.x) < el2.size.x)
     }
 
+    public drawBackground(imagePath: string){
+        
+    }
+
 
 
 

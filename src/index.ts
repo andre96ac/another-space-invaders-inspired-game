@@ -1,8 +1,7 @@
 import { SpaceInvaders } from "./SpaceInvaders.js";
-import { Game } from "./core/Game.js";
 
-const mainCanvas: HTMLCanvasElement|null  = <HTMLCanvasElement>document.getElementById("mainCanvas");
-if(!!mainCanvas){
-    const game = new SpaceInvaders(mainCanvas);
+const mainContainer: HTMLDivElement|null  = <HTMLDivElement>document.getElementById("mainContainer");
+if(!!mainContainer){
+    const game = new SpaceInvaders(mainContainer);
     game.start();
 }

@@ -6,9 +6,7 @@ export abstract class GameObject{
     //Reference to the game Controller
     protected readonly gameController: Game;
     
-    //Shape
-    private shape: "circle" | "rectangle";
-    
+  
     //Posizion
     private _position: Vector2;
     public get position(): Vector2{ return  this._position; }
@@ -64,6 +62,13 @@ export abstract class GameObject{
     }
 
 
+    //color of obj
+    protected color: string = "white";
+    //Shape
+    private shape: ShapeType;
+    //Filled
+    protected fill: boolean = false;
+
 
     
 
@@ -84,6 +89,8 @@ export abstract class GameObject{
     public render(context: CanvasRenderingContext2D): Symbol{
         if(!this.hidden){
             context.beginPath();
+            context.fillStyle = this.color;
+            context.strokeStyle = this.color;
             switch (this.shape){
                 case "circle":
                         context.ellipse(Math.round(this._position.x) , Math.round(this._position.y), Math.round(this._size.x/2), Math.round(this._size.y/2), 0, 0, 360)
@@ -91,9 +98,23 @@ export abstract class GameObject{
                 case "rectangle":
                         context.rect(Math.round(this._position.x), Math.round(this._position.y), Math.round(this._size.x), Math.round(this._size.y));
                     break;
+
+                case "triangle":
+                        context.beginPath();
+                        context.moveTo(this.position.x, this.position.y);
+                        context.lineTo(this.position.x + this.size.x, this.position.y);
+                        context.lineTo(this.position.x + this.size.x/2, this.position.y - this.size.y);
+                        context.closePath();
+                    break;
+
+                }
+                if(this.fill){
+                    context.fill();
+                }
+                else{
+                    context.stroke();
+                }
             }
-            context.fill();
-        }
         return Symbol("Calling super is mandatory");
     }
 
@@ -108,6 +129,9 @@ export abstract class GameObject{
             break;
             case "rectangle":
                 this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
+            break;
+            case "triangle":
+                this.position = Vector2.create(position.x, position.y + this.size.y/2);
             break;
         }
     }
@@ -149,4 +173,4 @@ export abstract class GameObject{
 
 }
 
-export type ShapeType = "circle" | "rectangle";
+export type ShapeType = "circle" | "rectangle" | "triangle";

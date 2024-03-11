@@ -1,6 +1,14 @@
 import * as fs from 'fs';
 import * as url from 'url';
 
+const FILES_TO_COPY = [
+    "index.html"
+]
+const FOLDERS_TO_COPY = [
+    "styles",
+    "assets"
+]
+
 const DIST_FOLDER_NAME = "dist";
 const SRC_FOLDER_NAME = "src"
 const UTILS_FOLDER_NAME = "utils"
@@ -21,8 +29,30 @@ fs.mkdirSync(__dist);
 console.log("New dist folder properly created!")
 
 
-console.log("Copying index.html in dist folter...")
-fs.copyFileSync(`${__src}index.html`, `${__dist}index.html`);
-console.log("Index.html copied properly in dist folder!")
+console.log("Copying FILES in dist folter...")
+FILES_TO_COPY.forEach(fileName => {
+    fs.copyFileSync(`${__src}${fileName}`, `${__dist}${fileName}`);
+});
+console.log("FILES copied properly in dist folder!")
+
+
+console.log("Copying FOLDERS in dist folter...")
+FOLDERS_TO_COPY.forEach(folder => {
+    copyFolder(folder);
+})
+console.log("FOLDERS copied properly in dist folder!")
+
 
 console.log("Building...")
+
+
+
+function copyFolder(folderName){
+    const subSrcPath = `${__src}${folderName}`
+    const subDistPath = `${__dist}/${folderName}`
+    fs.mkdirSync(subDistPath)
+    const fileList = fs.readdirSync(subSrcPath)
+    fileList.forEach(fileName =>{
+        fs.copyFileSync(`${subSrcPath}/${fileName}`, `${subDistPath}/${fileName}`)
+    })
+}
