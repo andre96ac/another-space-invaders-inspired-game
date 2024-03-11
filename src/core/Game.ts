@@ -43,8 +43,13 @@ export abstract class Game{
     //Frame call stack reference
     private animationCallstackRef: number | undefined;
 
+    //Pause
     private _paused: boolean = false;
     public get paused() {return this._paused};
+
+
+    //region audio
+    private htmlAudioLoop: HTMLAudioElement;
 
     constructor(container: HTMLDivElement){
 
@@ -55,8 +60,6 @@ export abstract class Game{
         
         //setting main canvas and context
         this._mainCanvas = document.createElement("canvas");
-        console.log(window.getComputedStyle(container).height)
-        console.log(window.getComputedStyle(container).width)
         this._mainCanvas.height = parseInt(window.getComputedStyle(container).height.replace("px", ""));
         this._mainCanvas.width = parseInt(window.getComputedStyle(container).width.replace("px", ""));
         this._mainCanvas.id = "mainCanvas";
@@ -91,6 +94,11 @@ export abstract class Game{
         this._uiContext = this._uiCanvas.getContext("2d") as CanvasRenderingContext2D;
 
 
+        //Audio
+        this.htmlAudioLoop = document.createElement("audio");
+        this.htmlAudioLoop.loop = true;
+
+
     }
     
 
@@ -120,6 +128,7 @@ export abstract class Game{
     public pause(): void{
         if(this.animationCallstackRef != undefined){
             this.onPause();
+            this.currentScene?.onPause();
             window.cancelAnimationFrame(this.animationCallstackRef);
             this.animationCallstackRef = undefined;
             this._paused = true;
@@ -136,6 +145,8 @@ export abstract class Game{
         if(this.animationCallstackRef == undefined){
             this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp))
             this.onResume();
+            this.currentScene?.onResume();
+
             this._paused = false
         }
         else{
@@ -228,6 +239,27 @@ export abstract class Game{
             imgElem.src = `./assets/${assetName}`;
             imgElem.onload = () => {resolve(imgElem)}
         })
+    }
+
+
+
+    public playAudioLoop(assetName?: string){
+        if(!!assetName){
+            this.htmlAudioLoop.src = `./assets/${assetName}`;
+        }
+        this.htmlAudioLoop.play();
+    }
+
+    public stopAudioLoop(){
+        this.htmlAudioLoop.pause();
+    }
+
+
+    public playAudioOneShot(assetName: string){
+        const audioEl = document.createElement("audio");
+        audioEl.src = `./assets/${assetName}`;
+        audioEl.onended = () => audioEl.remove();
+        audioEl.play();
     }
 
 

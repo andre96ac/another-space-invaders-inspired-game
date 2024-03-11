@@ -1,6 +1,7 @@
 import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
+import { GameScene } from "../scenes/GameScene.js";
 
 export class Enemy extends GameObject{
 
@@ -46,6 +47,10 @@ export class Enemy extends GameObject{
             this.currentHealth --;
         }
         else{
+            if(this.gameController.currentScene instanceof GameScene){
+                this.gameController.currentScene.incrementKillCount();
+            }
+            this.gameController.playAudioOneShot("explosion.wav")
             this.destroy();
         }
     }

@@ -91,13 +91,23 @@ export abstract class Scene{
     }
 
     public drawBackground(imagePath: string){
-        
+
     }
 
 
 
 
     //#region Events
+
+    /**
+     * Called when the game pause
+     */
+    public abstract onPause(): void
+
+    /**
+     * Called when the game resume from pause
+     */
+    public abstract onResume(): void
 
     /**
      * Called once at scene loading

@@ -8,7 +8,7 @@ import { Wall } from "../objects/Wall.js";
 import { Scene } from "../core/Scene.js";
 
 export class GameScene extends Scene{
-
+ 
     //#region RATIO AUMENTO DIFFICOLTA'
     
     
@@ -57,7 +57,10 @@ export class GameScene extends Scene{
     private currentLevel: number = 1;
 
 
+    //delay di spawn dei proiettili
     private bulletRatio: number = 300;
+
+    private killCount: number = 0;
 
 
 
@@ -95,6 +98,9 @@ export class GameScene extends Scene{
             if(!!this.player){
                 const bullet = this.istantiateEl(Bullet);
                 bullet.moveAtCentre(Vector2.create(this.player.center.x,  this.player.center.y - this.player.size.y - bullet.size.y/2 - 10));
+                if(!this.gameController.paused){
+                    this.gameController.playAudioOneShot("shoot.wav")
+                }
             }
         }, this.bulletRatio)
 
@@ -103,6 +109,9 @@ export class GameScene extends Scene{
 
         //disegno lo sfondo
         this.gameController.drawBackground("background.png");
+
+        this.gameController.playAudioLoop("music.mp3");
+ 
     }
 
    
@@ -118,6 +127,15 @@ export class GameScene extends Scene{
     public onUnload(){
 
     }
+
+
+    public onPause(): void {
+        this.gameController.stopAudioLoop();
+    }
+    public onResume(): void {
+        this.gameController.playAudioLoop();
+    }
+
     
     /**
      * Registrazione Listeners sulla tastiera
@@ -205,12 +223,10 @@ export class GameScene extends Scene{
     private setTick(tickInterval: number){
         if(tickInterval > 0){
             if(!!this.intervalPtr){
-                console.log("pulisco intervallo precedente")
                 clearInterval(this.intervalPtr);
             }
     
             this.tickInterval = tickInterval;
-            console.log("Setto intervallo a, ", tickInterval)
             this.intervalPtr = setInterval(() => this.tick(this), this.tickInterval);
         }
 
@@ -237,6 +253,10 @@ export class GameScene extends Scene{
             this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 0)
         }
         return super.destroyEl(gameObj);
+    }
+
+    public incrementKillCount(){
+        this.killCount ++;
     }
 
 }
