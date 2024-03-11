@@ -1,13 +1,14 @@
 {
   "name": "spaceinvaders",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple Space Invaders-style game written in js using canvas",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && node ./utils/copy-index.js "
+    "build": "node ./utils/copy-index.js && tsc",
+    "build-watch": "node ./utils/copy-index.js && tsc --watch"
   },
   "keywords": [],
-  "author": "",
+  "author": "Andrea Cuppini",
   "license": "ISC",
   "type": "module"
 }

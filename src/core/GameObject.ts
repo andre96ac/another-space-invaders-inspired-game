@@ -77,6 +77,8 @@ export abstract class GameObject{
 
     /**
      * Main method to draw the element (called every frame)
+     * Will draw circles and squares based on shape property
+     * Override this to draw custom shapes
      * @param context 
      */
     public render(context: CanvasRenderingContext2D): Symbol{

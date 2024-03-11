@@ -1,7 +1,7 @@
 import { GameScene } from "../scenes/GameScene.js";
 import { Scene } from "./Scene.js";
 
-export class Game{
+export abstract class Game{
 
     //Main Canvas
     private readonly _mainCanvas: HTMLCanvasElement;
@@ -44,7 +44,7 @@ export class Game{
     public start():void{
         
         //Loading firs scene
-        this.loadScene(GameScene)
+        this.onStart()
 
         //start rendering loop
         window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp));
@@ -83,5 +83,13 @@ export class Game{
         this._currentScene = new sceneFactory(this);
         this._currentScene.onLoad();
     }
+
+
+    //#region Events
+
+    /**
+     * Called at game start
+     */
+    public abstract onStart(): void;
 
 }
