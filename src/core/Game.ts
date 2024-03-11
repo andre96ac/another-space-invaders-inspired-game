@@ -22,6 +22,12 @@ export abstract class Game{
         return (this.currentTimestamp - this.lastTimestamp)/6;
     }
 
+    //Frame call stack reference
+    private animationCallstackRef: number | undefined;
+
+    private _paused: boolean = false;
+    public get paused() {return this._paused};
+
     constructor(canvas: HTMLCanvasElement){
         //setting canvas and context
         this._mainCanvas = canvas;
@@ -39,15 +45,61 @@ export abstract class Game{
     }
 
     /**
-     * Start the game
+     * Call onStart, then start animation frame loop
      */
     public start():void{
         
-        //Loading firs scene
-        this.onStart()
+        if(this.animationCallstackRef == undefined){
+            //Loading firs scene
+            this.onStart()
+    
+            //start rendering loop
+            this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp));
+        }
+        else {
+            console.error("Error calling start; game already running")
+        }
+        
+    }
+    
+    /**
+     * Call onPause, then stop animation frame loop
+     */
+    public pause(): void{
+        if(this.animationCallstackRef != undefined){
+            this.onPause();
+            window.cancelAnimationFrame(this.animationCallstackRef);
+            this.animationCallstackRef = undefined;
+            this._paused = true;
+        }
+        else{
+            console.error("Error calling pause; game not running")
+        }
+    }
+    
+    /**
+     * Call onResume, then start animation framae loop
+     */
+    public resume(): void{
+        if(this.animationCallstackRef == undefined){
+            this.onResume();
+            this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp))
+            this._paused = false
+        }
+        else{
+            console.error("Error calling resume; game already running")
+        }
+    }
 
-        //start rendering loop
-        window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp));
+    public exit(): void{
+        this.onExit()
+        if(this.animationCallstackRef != undefined){
+            window.cancelAnimationFrame(this.animationCallstackRef);
+            this.animationCallstackRef = undefined;
+        }
+        this._currentScene = undefined;
+        this.clearMainContext();
+        
     }
     
     /**
@@ -63,6 +115,7 @@ export abstract class Game{
         }
 
         //Game engine pipeline
+        this.clearMainContext();
         this._currentScene?.onUpdate();
         this._currentScene?.render();
         this._currentScene?.checkCollisions();
@@ -71,7 +124,7 @@ export abstract class Game{
         this.lastTimestamp = this.currentTimestamp;
 
         //Next frame
-        window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(pthis, timestamp));
+        this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(pthis, timestamp));
     }
 
     /**
@@ -84,6 +137,11 @@ export abstract class Game{
         this._currentScene.onLoad();
     }
 
+    private clearMainContext(){
+        this.mainContext.clearRect(0, 0, this.mainCanvas.width, this.mainCanvas.height)
+
+    }
+
 
     //#region Events
 
@@ -91,5 +149,19 @@ export abstract class Game{
      * Called at game start
      */
     public abstract onStart(): void;
+    /**
+     * Called when game paused
+     */
+    public abstract onPause(): void;
+    /**
+     * Called when game resumed
+     */
+    public abstract onResume(): void;
+    /**
+     * Called when game exit
+     */
+    public abstract onExit(): void;
+
+    //#endregion
 
 }

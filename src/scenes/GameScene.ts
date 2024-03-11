@@ -122,11 +122,22 @@ export class GameScene extends Scene{
      */
     private registerKeyEvents(): void{
         document.addEventListener("keypress", e => {
-            if(e.key == 'a'){
-                this.pressA = true;
-            }
-            else if(e.key == 'd'){
-                this.pressD = true;
+            switch (e.key){
+                case 'a':
+                    this.pressA = true;
+                break;
+                case 'd':
+                    this.pressD = true;
+                break;
+
+                case 'p':
+                    if(this.gameController.paused){
+                        this.gameController.resume();
+                    }
+                    else{
+                        this.gameController.pause();
+                    }
+                break;
             }
             
         })

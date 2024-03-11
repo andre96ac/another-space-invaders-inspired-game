@@ -57,7 +57,6 @@ export abstract class Scene{
      * @param context 
      */
     public render(){
-        this.gameController.mainContext.clearRect(0, 0, this.gameController.mainCanvas.width, this.gameController.mainCanvas.height)
         this.gameObjList.forEach(el => el.render(this.gameController.mainContext))
         return Symbol("this mehtod is called in Game render pipeline and should not be overrided, use update instead")
     }
