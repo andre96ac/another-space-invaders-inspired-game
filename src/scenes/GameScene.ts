@@ -6,8 +6,11 @@ import { GameObject } from "../core/GameObject.js";
 import { Player } from "../objects/Player.js";
 import { Wall } from "../objects/Wall.js";
 import { Scene } from "../core/Scene.js";
+import { DeathScene } from "./DeathScene.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
+import { Primitive } from "../core/Primitive.js";
 
-export class GameScene extends Scene{
+export class GameScene extends Scene<SpaceInvaders>{
  
     //#region RATIO AUMENTO DIFFICOLTA'
     
@@ -56,7 +59,6 @@ export class GameScene extends Scene{
     //livello attuale
     private currentLevel: number = 1;
 
-    private killCount: number = 0;
 
 
 
@@ -71,6 +73,7 @@ export class GameScene extends Scene{
     }
     public onLoad() {
 
+        this.gameController.killCount = 0;
 
         //creo l'array con le posizioni dei nemici
         this.initArPositions();
@@ -101,16 +104,19 @@ export class GameScene extends Scene{
 
    
     private initWalls(){
-        const wallUp = this.istantiateEl(Wall);
-        wallUp.setProperties("horizontal",this.gameController.mainCanvas.width, Vector2.create(this.gameController.mainCanvas.width/2, 5));
-        const wallDown = this.istantiateEl(Wall);
-        wallDown.setProperties("horizontal",this.gameController.mainCanvas.width, Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height - 5));
+       
+        const box = this.istantiateEl(Primitive)
+        box.color = "white"
+        box.lineWidth = 2;
+        box.fill = false;
+        box.size = Vector2.create(this.gameController.mainCanvas.width - 10, this.gameController.mainCanvas.height - 10)
+        box.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2))
     }
     
 
 
     public onUnload(){
-
+        return super.onUnload();
     }
 
 
@@ -241,7 +247,11 @@ export class GameScene extends Scene{
     }
 
     public incrementKillCount(){
-        this.killCount ++;
+        this.gameController.killCount ++;
+    }
+
+    public playerDie(){
+        this.gameController.loadScene(DeathScene)
     }
 
 }

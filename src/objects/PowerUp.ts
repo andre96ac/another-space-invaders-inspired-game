@@ -14,8 +14,7 @@ export class PowerUp extends GameObject{
             this.destroy();
         }
     }
-    public onMouseClick(ev: MouseEvent): void {
-    }
+
     public onLoad(): void {
     }
     public onUpdate(): void {

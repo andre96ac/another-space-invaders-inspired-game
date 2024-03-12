@@ -27,11 +27,7 @@ export abstract class GameObject{
     private _collidable: boolean = false;
     public get collidable(): boolean{ return  this._collidable }
     protected set collidable(value: boolean){ this._collidable = value }
-    
-    //Button (set true to notify onMouseClickEvent)
-    private _button: boolean = false;
-    public get button(): boolean{ return  this._button }
-    protected set button(value: boolean){ this._button = value }
+
 
     //hidden
     private _hidden: boolean = false;
@@ -70,9 +66,11 @@ export abstract class GameObject{
     //color of obj
     protected color: string = "black";
     //Shape
-    private shape: ShapeType;
+    protected shape: ShapeType;
     //Filled
     protected fill: boolean = false;
+    //line width
+    protected lineWidth: number = 1;
 
 
     
@@ -96,6 +94,7 @@ export abstract class GameObject{
             context.beginPath();
             context.fillStyle = this.color;
             context.strokeStyle = this.color;
+            context.lineWidth = this.lineWidth;
             switch (this.shape){
                 case "circle":
                         context.ellipse(Math.round(this._position.x + this.size.x/2) , Math.round(this._position.y + this.size.y/2), Math.round(this._size.x/2), Math.round(this._size.y/2), 0, 0, 360)
@@ -138,6 +137,9 @@ export abstract class GameObject{
                 case "triangle":
                 this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
             break;
+            case "custom": {
+                this.position = Vector2.copy(position);
+            }
         }
     }
 
@@ -158,7 +160,6 @@ export abstract class GameObject{
      */
     public abstract onCollisionEnter(other: GameObject): void;
 
-    public abstract onMouseClick(ev: MouseEvent): void;
 
     /**
      * Called at the gameObject creation
@@ -180,4 +181,4 @@ export abstract class GameObject{
 
 }
 
-export type ShapeType = "circle" | "rectangle" | "triangle";
+export type ShapeType = "circle" | "rectangle" | "triangle" | "custom";

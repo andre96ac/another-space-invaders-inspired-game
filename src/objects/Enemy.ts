@@ -5,9 +5,6 @@ import { GameScene } from "../scenes/GameScene.js";
 import { PowerUp } from "./PowerUp.js";
 
 export class Enemy extends GameObject{
-    public onMouseClick(ev: MouseEvent): void {
-
-    }
 
 
     private maxHealth = 3;
@@ -45,7 +42,10 @@ export class Enemy extends GameObject{
             _this.position = Vector2.create(_this.position.x, _this.position.y + _this.enemyStep)
         }
         else{
-            _this.position =Vector2.create(_this.position.x, _this.gameController.mainCanvas.height - _this.size.y)
+            if(this.gameController.currentScene instanceof GameScene){
+                this.gameController.currentScene.playerDie();
+            }
+            // _this.position =Vector2.create(_this.position.x, _this.gameController.mainCanvas.height - _this.size.y)
         }
     }
 

@@ -5,8 +5,7 @@ import { Enemy } from "./Enemy.js";
 import { GameObject } from "../core/GameObject.js";
 
 export class Wall extends GameObject{
-    public onMouseClick(ev: MouseEvent): void {
-    }
+
     public onCollisionEnter(other: GameObject): void {
         if(other instanceof Bullet || other instanceof Enemy){
             this.gameController.currentScene?.destroyEl(other);

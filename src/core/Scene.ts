@@ -1,22 +1,23 @@
+import { Button } from "./Button.js";
 import { Game } from "./Game.js";
 import { GameObject } from "./GameObject.js";
 
-export abstract class Scene{
+export abstract class Scene<T extends Game>{
 
 
     //Loaded GameObject list
     private gameObjList: GameObject[] = [];
 
     //reference to the gameController
-    protected readonly gameController: Game;
+    protected readonly gameController: T;
 
     //Array with collidables gameObjects
     public get arCollidables(): GameObject[]{
         return this.gameObjList.filter(el => el.collidable)
     }
 
-    public get arButtons(): GameObject[]{
-        return this.gameObjList.filter(el => el.button);
+    public get arButtons(): Button[]{
+        return this.gameObjList.filter(el => el instanceof Button) as Button[];
     }
 
    
@@ -24,7 +25,7 @@ export abstract class Scene{
 
 
 
-    constructor(gameController: Game){
+    constructor(gameController: T){
         this.gameController = gameController;
     }
 
@@ -129,7 +130,10 @@ export abstract class Scene{
     /**
      * Called once at scene unloading
      */
-    public abstract onUnload(): void;
+    public onUnload(): Symbol{
+        this.gameObjList.forEach(el => el.destroy())
+        return Symbol("Calling super is mandatory")
+    };
 
     /**
      * Called every frame update

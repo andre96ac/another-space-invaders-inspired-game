@@ -30,7 +30,7 @@ export abstract class Game{
 
     
     //Current Scene
-    private _currentScene: Scene | undefined;
+    private _currentScene: Scene<typeof this> | undefined;
     public get currentScene(){  return this._currentScene};
 
     //Delta time
@@ -202,13 +202,13 @@ export abstract class Game{
      * Called to change scene (old scene will be destroyed)
      * @param sceneFactory Scene to load
      */
-    public loadScene(sceneFactory:  new(gameController: Game) => Scene){
+    public loadScene<T extends Game>(sceneFactory:  new(gameController: T) => Scene<typeof this>){
         this._currentScene?.onUnload();
-        this._currentScene = new sceneFactory(this);
+        this._currentScene = new sceneFactory(this as any as T);
         this._currentScene.onLoad();
     }
 
-    private clearContext(contextType: ContextType){
+    public clearContext(contextType: ContextType){
         switch(contextType){
             case "background":
                 this._backContext.clearRect(0, 0, this.mainCanvas.width, this.mainCanvas.height)

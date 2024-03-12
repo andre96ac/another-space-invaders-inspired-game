@@ -1,7 +1,9 @@
 import { Game } from "./core/Game.js";
-import { GameScene } from "./scenes/GameScene.js";
+import { MenuScene } from "./scenes/MenuScene.js";
 
 export class SpaceInvaders extends Game{
+    public killCount = 0;
+
     public onPause(): void {
     }
     public onResume(): void {
@@ -9,7 +11,8 @@ export class SpaceInvaders extends Game{
     public onExit(): void {
     }
     public onStart(): void {
-        this.loadScene(GameScene);
+        // @ts-ignore
+        this.loadScene<SpaceInvaders>(MenuScene);
     }
 
 }

@@ -19,8 +19,6 @@ export class Player extends GameObject{
 
     private removePowerUpTimeoutPtr : null | number = null;
 
-    public onMouseClick(ev: MouseEvent): void {
-    }
     public onCollisionEnter(other: GameObject): void {
     }
     public onUpdate(): void {
