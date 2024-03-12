@@ -10,14 +10,14 @@ export class Player extends GameObject{
     private bulletRatio: number = 300;
 
     //bullet spawn interval
-    private bulletSpawnIntervalPtr: null | number = null;
+    private bulletSpawnIntervalPtr: undefined | number;
 
     //Player Speed
     private playerSpeed: number = 3;
 
     private powerUpDuration: number = 10000;
 
-    private removePowerUpTimeoutPtr : null | number = null;
+    private removePowerUpTimeoutPtr : undefined | number;
 
     public onCollisionEnter(other: GameObject): void {
     }
@@ -26,16 +26,12 @@ export class Player extends GameObject{
     }
     public onLoad(): void {
                 //faccio partire il timer degli spari
-                this.bulletSpawnIntervalPtr = setInterval(() => {
+                this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => {
                    this.shot();
                 }, this.bulletRatio)
 
     }
     public onUnload(): void {
-        if(!! this.bulletSpawnIntervalPtr){
-            clearInterval(this.bulletSpawnIntervalPtr)
-        }
-
     }
 
 
@@ -77,17 +73,17 @@ export class Player extends GameObject{
     public enablePowerUp(){
         if(!!this.bulletSpawnIntervalPtr){
             clearInterval(this.bulletSpawnIntervalPtr)
-            this.bulletSpawnIntervalPtr = setInterval(() => this.shot(true), this.bulletRatio / 3)
+            this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(true), this.bulletRatio / 3)
             this.color = "rgb(0, 255, 153)";
 
             if(!!this.removePowerUpTimeoutPtr){
                 clearTimeout(this.removePowerUpTimeoutPtr)
             }
 
-            this.removePowerUpTimeoutPtr = setTimeout(() => {
+            this.removePowerUpTimeoutPtr = this.gameController.currentScene?.setTimeout(() => {
                 if(!! this.bulletSpawnIntervalPtr){
                     clearInterval(this.bulletSpawnIntervalPtr)
-                    this.bulletSpawnIntervalPtr = setInterval(() => this.shot(), this.bulletRatio)
+                    this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(), this.bulletRatio)
                     this.color = "white";
                 }
                 

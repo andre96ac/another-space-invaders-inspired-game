@@ -5,6 +5,9 @@ import { GameObject } from "./GameObject.js";
 export abstract class Scene<T extends Game>{
 
 
+    private intervalsPtrs: number[] = [];
+    private timeoutsPtrs: number[] = [];
+
     //Loaded GameObject list
     private gameObjList: GameObject[] = [];
 
@@ -106,6 +109,29 @@ export abstract class Scene<T extends Game>{
     }
 
 
+    /**
+     * Set an interval relative to the scene; all intervals will be cleared at scene unload
+     * @param callback callback to execute
+     * @param millis time
+     */
+    public setInterval(callback: Function, millis: number): number{
+        const ptr = setInterval(callback, millis);
+        this.intervalsPtrs.push(ptr);
+        return ptr
+    }
+
+    /**
+     * Set a timeout relative to the scene; all timeouts will be cleared at scene unload
+     * @param callback callback to execute
+     * @param millis time
+     */
+    public setTimeout(callback: Function, millis: number): number{
+        const ptr = setTimeout(callback, millis);
+        this.timeoutsPtrs.push(ptr);
+        return ptr
+    }
+
+
 
 
 
@@ -132,6 +158,8 @@ export abstract class Scene<T extends Game>{
      */
     public onUnload(): Symbol{
         this.gameObjList.forEach(el => el.destroy())
+        this.timeoutsPtrs.forEach(el => clearTimeout(el))
+        this.intervalsPtrs.forEach(el => clearInterval(el))
         return Symbol("Calling super is mandatory")
     };
 

@@ -31,7 +31,14 @@ export abstract class Game{
     
     //Current Scene
     private _currentScene: Scene<typeof this> | undefined;
-    public get currentScene(){  return this._currentScene};
+    public get currentScene(){ 
+        if(!!this._currentScene){
+            return this._currentScene 
+        }
+        else{
+            throw Error("No scene loaded")
+        }
+    }
 
     //Delta time
     private lastTimestamp: DOMHighResTimeStamp = 0;

@@ -93,7 +93,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
 
         //faccio partire il timer per l'aumento livello
-        setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
+        this.setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
 
         //disegno lo sfondo
         this.gameController.drawBackground("background.png");
@@ -200,11 +200,12 @@ export class GameScene extends Scene<SpaceInvaders>{
 
     /**
      * Scatta ad ogni tick per far avanzare e spawnare i nemici
-     * @param _this 
      */
-    private tick(_this: typeof this){
-        _this.enemies.forEach(enemy => enemy.moveDown(enemy));
-        _this.spawnEnemyRow();
+    private tick(){
+        if(!this.gameController.paused){
+            this.enemies.forEach(enemy => enemy.moveDown(enemy));
+            this.spawnEnemyRow();
+        }
     }
 
     /**
@@ -218,7 +219,7 @@ export class GameScene extends Scene<SpaceInvaders>{
             }
     
             this.tickInterval = tickInterval;
-            this.intervalPtr = setInterval(() => this.tick(this), this.tickInterval);
+            this.intervalPtr = this.setInterval(() => this.tick(), this.tickInterval);
         }
 
     }
@@ -241,7 +242,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     }
     public destroyEl(gameObj: GameObject) {
         if(gameObj instanceof Enemy){
-            this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 0)
+            this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 1)
         }
         return super.destroyEl(gameObj);
     }
