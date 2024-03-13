@@ -5,7 +5,6 @@ import { GameScene } from "./GameScene.js";
 import { Text } from "../core/Text.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Primitive.js";
-import { Player } from "../objects/Player.js";
 
 export class MenuScene extends Scene<SpaceInvaders>{
     public onPause(): void {

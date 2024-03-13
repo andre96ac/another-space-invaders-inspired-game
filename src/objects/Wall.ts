@@ -3,10 +3,11 @@ import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Bullet } from "./Bullet.js";
 import { Enemy } from "./Enemy.js";
 import { GameObject } from "../core/GameObject.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
 
-export class Wall extends GameObject{
+export class Wall extends GameObject<SpaceInvaders>{
 
-    public onCollisionEnter(other: GameObject): void {
+    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Bullet || other instanceof Enemy){
             this.gameController.currentScene?.destroyEl(other);
         }
@@ -18,7 +19,7 @@ export class Wall extends GameObject{
     public onUpdate(): void {
     }
 
-    constructor(gameController: Game){
+    constructor(gameController: SpaceInvaders){
         super(gameController, "rectangle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
         this.hidden = false;

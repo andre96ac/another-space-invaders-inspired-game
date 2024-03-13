@@ -1,15 +1,11 @@
-import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
-import { Bullet } from "../objects/Bullet.js";
 import { Enemy } from "../objects/Enemy.js";
 import { GameObject } from "../core/GameObject.js";
 import { Player } from "../objects/Player.js";
-import { Wall } from "../objects/Wall.js";
 import { Scene } from "../core/Scene.js";
 import { DeathScene } from "./DeathScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Primitive.js";
-import { MenuScene } from "./MenuScene.js";
 
 export class GameScene extends Scene<SpaceInvaders>{
  
@@ -253,7 +249,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
         this._powerUpSpawnPercentage += this.powerUpspawnStep;
     }
-    public destroyEl(gameObj: GameObject) {
+    public destroyEl(gameObj: GameObject<SpaceInvaders>) {
         if(gameObj instanceof Enemy){
             this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 1)
         }
