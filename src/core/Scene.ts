@@ -4,6 +4,8 @@ import { GameObject } from "./GameObject.js";
 
 export abstract class Scene<T extends Game>{
 
+    private keyListenerController: AbortController = new AbortController();
+
 
     private intervalsPtrs: number[] = [];
     private timeoutsPtrs: number[] = [];
@@ -131,6 +133,47 @@ export abstract class Scene<T extends Game>{
         return ptr
     }
 
+    /**
+     * Register a SAFE callback when key is pressed; listener will be removed at scene unload 
+     * @param key key to bind
+     * @param callback callback to execute
+     */
+    public registerKeyDownListener(key: string, callback: (ev: KeyboardEvent) => any):void{
+        document.addEventListener("keydown", (ev) => {
+            if(ev.key == key){
+                callback(ev);
+            }
+        }, {signal: this.keyListenerController.signal})
+        
+    }
+
+    /**
+     * Register a SAFE callback when key is pressed; listener will be removed at scene unload 
+     * @param key key to bind
+     * @param callback callback to execute
+     */
+    public registerKeyUpListener(key: string, callback: (ev: KeyboardEvent) => any):void{
+        document.addEventListener("keyup", (ev) => {
+            if(ev.key == key){
+                callback(ev);
+            }
+        }, {signal: this.keyListenerController.signal})
+
+    }
+
+
+    /**
+     * Add a SAFE listener of  specified type to the target. All listeners will be removed on scene unload 
+     * @param target target element of the listener
+     * @param type listener  type
+     * @param callback callback fn
+     */
+    public addEventListener<K extends keyof GlobalEventHandlersEventMap>(target: EventTarget, type: K, callback: (evt: GlobalEventHandlersEventMap[K]) => void): void{
+        // @ts-ignore
+        target.addEventListener(type, ev => callback(ev), {signal: this.keyListenerController.signal})
+    }
+    
+
 
 
 
@@ -160,6 +203,8 @@ export abstract class Scene<T extends Game>{
         this.gameObjList.forEach(el => el.destroy())
         this.timeoutsPtrs.forEach(el => clearTimeout(el))
         this.intervalsPtrs.forEach(el => clearInterval(el))
+
+        this.keyListenerController.abort();
         return Symbol("Calling super is mandatory")
     };
 
