@@ -16,8 +16,6 @@ export class SpaceInvaders extends Game{
         this.audioLoaded.then(() => {
             this.loadScene(MenuScene);
         })
-
-        this.currentScene.test.killCount
     }
 
 

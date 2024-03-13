@@ -25,8 +25,6 @@ export abstract class Scene<T extends Game>{
         return this.gameObjList.filter(el => el instanceof Button) as Button[];
     }
 
-    public get test(){return this.gameController}
-
    
 
 
