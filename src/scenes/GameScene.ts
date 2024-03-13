@@ -9,6 +9,7 @@ import { Scene } from "../core/Scene.js";
 import { DeathScene } from "./DeathScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Primitive.js";
+import { MenuScene } from "./MenuScene.js";
 
 export class GameScene extends Scene<SpaceInvaders>{
  
@@ -302,5 +303,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private cleanUi(){
         this.gameController.clearContext("ui");
     }
+
+
 
 }
