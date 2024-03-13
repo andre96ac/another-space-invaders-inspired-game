@@ -31,10 +31,11 @@ export class GameScene extends Scene<SpaceInvaders>{
     private tickDecreaseRatio = 400;
 
     //Percentuale di spawn powerup
-    private _powerUpSpawnPercentage = .05;
+    private _powerUpSpawnPercentage = 0;
     public get powerUpSpawnPercentage() { return this._powerUpSpawnPercentage }
+    
     //aumento percentuale di spawn power up per livello
-    private powerUpspawnStep = .05;
+    private powerUpspawnStep = .03;
 
     
     //#endregion
