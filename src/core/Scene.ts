@@ -25,6 +25,8 @@ export abstract class Scene<T extends Game>{
         return this.gameObjList.filter(el => el instanceof Button) as Button[];
     }
 
+    public get test(){return this.gameController}
+
    
 
 
@@ -41,8 +43,8 @@ export abstract class Scene<T extends Game>{
      * @param Factory 
      * @returns 
      */
-    public istantiateEl<T extends GameObject>(Factory: new (gameController: Game)=>T): T{
-        const instance: T = new Factory(this.gameController)
+    public istantiateEl<T2 extends GameObject>(Factory: new (gameController: Game)=>T2): T2{
+        const instance: T2 = new Factory(this.gameController)
         instance.onLoad();
         this.gameObjList.push(instance);
         return instance;

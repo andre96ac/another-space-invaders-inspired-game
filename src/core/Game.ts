@@ -214,9 +214,9 @@ export abstract class Game{
      * Called to change scene (old scene will be destroyed)
      * @param sceneFactory Scene to load
      */
-    public loadScene<T extends Game>(sceneFactory:  new(gameController: T) => Scene<typeof this>){
+    public loadScene<T extends Game>(sceneFactory:  new(gameController: T) => Scene<T>){
         this._currentScene?.onUnload();
-        this._currentScene = new sceneFactory(this as any as T);
+        this._currentScene = new sceneFactory(this as any as T) as any as Scene<this>;
         this._currentScene.onLoad();
     }
 

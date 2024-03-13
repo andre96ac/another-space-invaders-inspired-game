@@ -1,7 +1,6 @@
 import { Scene } from "../core/Scene.js";
 import { Button } from "../core/Button.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
-import { GameScene } from "./GameScene.js";
 import { Text } from "../core/Text.js";
 import { MenuScene } from "./MenuScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
