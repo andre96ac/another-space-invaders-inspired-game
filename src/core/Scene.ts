@@ -11,18 +11,18 @@ export abstract class Scene<T extends Game>{
     private timeoutsPtrs: number[] = [];
 
     //Loaded GameObject list
-    private gameObjList: GameObject[] = [];
+    private gameObjList: GameObject<T>[] = [];
 
     //reference to the gameController
     protected readonly gameController: T;
 
     //Array with collidables gameObjects
-    public get arCollidables(): GameObject[]{
+    public get arCollidables(): GameObject<T>[]{
         return this.gameObjList.filter(el => el.collidable)
     }
 
-    public get arButtons(): Button[]{
-        return this.gameObjList.filter(el => el instanceof Button) as Button[];
+    public get arButtons(): Button<T>[]{
+        return this.gameObjList.filter(el => el instanceof Button) as Button<T>[];
     }
 
    
@@ -41,7 +41,7 @@ export abstract class Scene<T extends Game>{
      * @param Factory 
      * @returns 
      */
-    public istantiateEl<T2 extends GameObject>(Factory: new (gameController: Game)=>T2): T2{
+    public istantiateEl<T2 extends GameObject<T>>(Factory: new (gameController: T)=>T2): T2{
         const instance: T2 = new Factory(this.gameController)
         instance.onLoad();
         this.gameObjList.push(instance);
@@ -54,7 +54,7 @@ export abstract class Scene<T extends Game>{
      * @param gameObj gameObject to remove
      * @returns 
      */
-    public destroyEl(gameObj: GameObject): Symbol{
+    public destroyEl(gameObj: GameObject<T>): Symbol{
         const idx = this.gameObjList.findIndex(el => el == gameObj)
         this.gameObjList[idx].onUnload();
         this.gameObjList.splice(idx, 1);
@@ -94,7 +94,7 @@ export abstract class Scene<T extends Game>{
      * @param el2 
      * @returns 
      */
-    private areColliding(el: GameObject, el2: GameObject):boolean {
+    private areColliding(el: GameObject<T>, el2: GameObject<T>):boolean {
          return (el.position.y < el2.position.y? (el2.position.y - el.position.y) < el.size.y : (el.position.y - el2.position.y) < el2.size.y)
          && (el.position.x < el2.position.x? (el2.position.x - el.position.x) < el.size.x : (el.position.x - el2.position.x) < el2.size.x)
     }

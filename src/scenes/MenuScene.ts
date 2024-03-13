@@ -5,6 +5,7 @@ import { GameScene } from "./GameScene.js";
 import { Text } from "../core/Text.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Primitive.js";
+import { Player } from "../objects/Player.js";
 
 export class MenuScene extends Scene<SpaceInvaders>{
     public onPause(): void {
@@ -29,6 +30,7 @@ export class MenuScene extends Scene<SpaceInvaders>{
         button1.lineWidth = 4;
         button1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 50))
         button1.onMouseClick = (ev: MouseEvent) => {this.gameController.playerNumber = 1; this.gameController.loadScene(GameScene)}
+
 
         const button2 = this.istantiateEl(Button);
         button2.innerText = "2 Players";

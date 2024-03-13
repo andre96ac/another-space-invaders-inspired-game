@@ -2,11 +2,12 @@ import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Enemy } from "./Enemy.js";
 import { GameObject } from "../core/GameObject.js";
+import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
 
-export class Bullet extends GameObject{
+export class Bullet extends GameObject<SpaceInvaders>{
     public onMouseClick(ev: MouseEvent): void {
     }
-    public onCollisionEnter(other: GameObject): void {
+    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Enemy){
             other.hit();
             this.destroy();
@@ -25,7 +26,7 @@ export class Bullet extends GameObject{
     }
     public onUnload(): void {
     }
-    constructor(gameController: Game){
+    constructor(gameController: SpaceInvaders){
         super(gameController, "circle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
         this.color = "white"

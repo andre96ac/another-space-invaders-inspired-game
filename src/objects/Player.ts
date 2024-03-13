@@ -2,8 +2,9 @@ import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 import { Bullet } from "./Bullet.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
 
-export class Player extends GameObject{
+export class Player extends GameObject<SpaceInvaders>{
 
 
     //delay di spawn dei proiettili
@@ -35,7 +36,7 @@ export class Player extends GameObject{
             return 'white'
     }
 
-    public onCollisionEnter(other: GameObject): void {
+    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
     }
     public onUpdate(): void {
     
@@ -51,7 +52,7 @@ export class Player extends GameObject{
     }
 
 
-    constructor(gameController: Game){
+    constructor(gameController: SpaceInvaders){
         const playerSize = 30;
         super(gameController, "triangle", Vector2.zero, Vector2.create(playerSize, playerSize));
         this.color = "white"

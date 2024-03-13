@@ -1,10 +1,10 @@
 import { Game } from "./Game.js";
 import { Vector2 } from "./Helpers/Vector2.js";
 
-export abstract class GameObject{
+export abstract class GameObject<T extends Game>{
 
     //Reference to the game Controller
-    protected readonly gameController: Game;
+    protected readonly gameController: T;
     
   
     //Posizion
@@ -75,7 +75,7 @@ export abstract class GameObject{
 
     
 
-    constructor(gameController: Game, shape: ShapeType, position: Vector2 = Vector2.zero, size: Vector2 = Vector2.zero){
+    constructor(gameController: T, shape: ShapeType, position: Vector2 = Vector2.zero, size: Vector2 = Vector2.zero){
         this.shape = shape;
         this._position = position;
         this._size = size;
@@ -158,7 +158,7 @@ export abstract class GameObject{
      * Called every Frame if this is colliding with other collidable gameObject
      * @param other Other GameObject colliding
      */
-    public abstract onCollisionEnter(other: GameObject): void;
+    public abstract onCollisionEnter(other: GameObject<T>): void;
 
 
     /**

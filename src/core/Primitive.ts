@@ -2,8 +2,8 @@ import { Game } from "./Game.js";
 import { GameObject, ShapeType } from "./GameObject.js";
 import { Vector2 } from "./Helpers/Vector2.js";
 
-export class Primitive extends GameObject{
-    public onCollisionEnter(other: GameObject): void {
+export class Primitive<T extends Game> extends GameObject<T>{
+    public onCollisionEnter(other: GameObject<T>): void {
     }
     public onLoad(): void {
     }
@@ -25,7 +25,7 @@ export class Primitive extends GameObject{
     }
 
 
-    public constructor(gameController: Game){
+    public constructor(gameController: T){
         super(gameController, "rectangle", Vector2.zero, Vector2.create(20, 20));
         this.color = "blue";
         this.fill = false;

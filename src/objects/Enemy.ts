@@ -4,8 +4,9 @@ import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
 import { RatioPowerUp } from "./RatioPowerUp.js";
 import { DoublePowerUp } from "./DoublePowerUp.js";
+import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
 
-export class Enemy extends GameObject{
+export class Enemy extends GameObject<SpaceInvaders>{
 
 
     private maxHealth = 3;
@@ -13,7 +14,7 @@ export class Enemy extends GameObject{
 
     // private powerUpspawnPercentage = 0.05;
 
-    public onCollisionEnter(other: GameObject): void {
+    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
 
     }
     public onUpdate(): void {
@@ -29,7 +30,7 @@ export class Enemy extends GameObject{
 
 
     
-    constructor(gameController: Game){
+    constructor(gameController: SpaceInvaders){
         const enemySize: Vector2 = Vector2.create(40, 20);
         super(gameController, "rectangle", Vector2.zero, enemySize);
         this._enemyStep = this.size.x + 20
@@ -72,7 +73,7 @@ export class Enemy extends GameObject{
     }
 
     private spawnPowerUp(){
-        const factory: new(gameController: Game) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
+        const factory: new(gameController: SpaceInvaders) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
         const powerUp = this.gameController.currentScene.istantiateEl(factory);
         powerUp.moveAtCentre(this.center)
     }
