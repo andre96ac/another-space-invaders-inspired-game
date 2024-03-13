@@ -13,8 +13,11 @@ export class SpaceInvaders extends Game{
     public onExit(): void {
     }
     public onStart(): void {
-        // @ts-ignore
-        this.loadScene<SpaceInvaders>(MenuScene);
+        this.audioLoaded.then(() => {
+
+            // @ts-ignore
+            this.loadScene<SpaceInvaders>(MenuScene);
+        })
     }
 
 }

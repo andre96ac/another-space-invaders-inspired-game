@@ -10,7 +10,8 @@ export class Enemy extends GameObject{
     private maxHealth = 3;
     private currentHealth = this.maxHealth;
 
-    private powerUpspawnPercentage = 0.05;
+    // private powerUpspawnPercentage = 0.05;
+    private powerUpspawnPercentage = 1;
 
     public onCollisionEnter(other: GameObject): void {
 

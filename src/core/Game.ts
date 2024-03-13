@@ -1,4 +1,5 @@
 import { GameScene } from "../scenes/GameScene.js";
+import { AudioController } from "./Helpers/AudioController.js";
 import { Scene } from "./Scene.js";
 
 export abstract class Game{
@@ -56,7 +57,9 @@ export abstract class Game{
 
 
     //region audio
-    private htmlAudioLoop: HTMLAudioElement;
+    private audioController: AudioController = new AudioController();
+    private readonly _audioLoaded: Promise<void>;
+    public get audioLoaded() {return this._audioLoaded}
 
     constructor(container: HTMLDivElement){
 
@@ -100,13 +103,15 @@ export abstract class Game{
 
         this._uiContext = this._uiCanvas.getContext("2d") as CanvasRenderingContext2D;
 
-
-        //Audio
-        this.htmlAudioLoop = document.createElement("audio");
-        this.htmlAudioLoop.loop = true;
-
+    
         //Setup mouse click check
         this.mainCanvas.addEventListener("click", (ev) => this.currentScene?.checkButtonClick(ev))
+
+        this._audioLoaded = this.audioController.loadClips([
+            "explosion.wav",
+            "music.mp3",
+            "shoot.wav"
+        ])
 
     }
     
@@ -255,22 +260,16 @@ export abstract class Game{
 
 
     public playAudioLoop(assetName?: string){
-        if(!!assetName){
-            this.htmlAudioLoop.src = `./assets/${assetName}`;
-        }
-        this.htmlAudioLoop.play();
+       this.audioController.playAudioLoop(assetName)
     }
 
     public stopAudioLoop(){
-        this.htmlAudioLoop.pause();
+        this.audioController.stopAudioLoop();
     }
 
 
     public playAudioOneShot(assetName: string){
-        const audioEl = document.createElement("audio");
-        audioEl.src = `./assets/${assetName}`;
-        audioEl.onended = () => audioEl.remove();
-        audioEl.play();
+        this.audioController.playAudioOneShot(assetName)
     }
 
 
