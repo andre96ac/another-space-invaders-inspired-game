@@ -15,9 +15,25 @@ export class Player extends GameObject{
     //Player Speed
     private playerSpeed: number = 3;
 
-    private powerUpDuration: number = 10000;
+    private ratioPowerUpDuration: number = 10000;
+    private doublePowerUpDuration: number = 10000;
 
-    private removePowerUpTimeoutPtr : undefined | number;
+    private removeRatioPowerUpTimeoutPtr : undefined | number;
+    private removeDoublePowerUpTimeoutPtr : undefined | number;
+
+    private doubleShotActive: boolean = false; 
+    private ratioActive: boolean = false; 
+
+    private get computedColor(): string{
+        if(this.doubleShotActive && this.ratioActive)
+            return 'rgb(0, 255, 0)'
+        else if(this.doubleShotActive)
+            return 'rgb(255, 255, 0)'
+        else if(this.ratioActive)
+            return 'rgb(0, 255, 153)'
+        else    
+            return 'white'
+    }
 
     public onCollisionEnter(other: GameObject): void {
     }
@@ -61,34 +77,62 @@ export class Player extends GameObject{
 
     private shot(doubleSpeed: boolean = false){
         if(!this.gameController.paused){
-            const bullet = this.gameController.currentScene?.istantiateEl(Bullet);
-            if(doubleSpeed){
-                bullet?.setPowerUp();
+            if(this.doubleShotActive){
+                const bullet = this.gameController.currentScene.istantiateEl(Bullet);
+                const bullet2 = this.gameController.currentScene.istantiateEl(Bullet);
+                if(doubleSpeed){
+                    bullet.setPowerUp();
+                    bullet2.setPowerUp();
+                }
+                bullet.moveAtCentre(Vector2.create(this.center.x - 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
+                bullet2.moveAtCentre(Vector2.create(this.center.x + 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
+                bullet.setColor(this.computedColor)
+                bullet2.setColor(this.computedColor)
             }
-            bullet?.moveAtCentre(Vector2.create(this.center.x,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            this.gameController.playAudioOneShot("shoot.wav")
+            else{
+                const bullet = this.gameController.currentScene.istantiateEl(Bullet);
+                if(doubleSpeed){
+                    bullet.setPowerUp();
+                }
+                bullet.moveAtCentre(Vector2.create(this.center.x,  this.center.y - this.size.y/2 - bullet.size.y/2));
+                bullet.setColor(this.computedColor)
+            }
         }
     }
 
-    public enablePowerUp(){
+    public enableRatioPowerUp(){
         if(!!this.bulletSpawnIntervalPtr){
+            this.ratioActive = true;
             clearInterval(this.bulletSpawnIntervalPtr)
             this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(true), this.bulletRatio / 3)
-            this.color = "rgb(0, 255, 153)";
+            this.color = this.computedColor;
 
-            if(!!this.removePowerUpTimeoutPtr){
-                clearTimeout(this.removePowerUpTimeoutPtr)
+            if(!!this.removeRatioPowerUpTimeoutPtr){
+                clearTimeout(this.removeRatioPowerUpTimeoutPtr)
             }
 
-            this.removePowerUpTimeoutPtr = this.gameController.currentScene?.setTimeout(() => {
+            this.removeRatioPowerUpTimeoutPtr = this.gameController.currentScene?.setTimeout(() => {
                 if(!! this.bulletSpawnIntervalPtr){
                     clearInterval(this.bulletSpawnIntervalPtr)
                     this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(), this.bulletRatio)
-                    this.color = "white";
+                    this.ratioActive = false;
+                    this.color = this.computedColor;
                 }
                 
-            }, this.powerUpDuration);
+            }, this.ratioPowerUpDuration);
         }
     }
+
+    public enableDoublePowerUp(){
+        if(!!this.removeDoublePowerUpTimeoutPtr){
+            clearTimeout(this.removeDoublePowerUpTimeoutPtr)
+        }
+        this.doubleShotActive = true;
+        this.color = this.computedColor;
+        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration)
+    }
+
+
+  
     
 }

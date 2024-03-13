@@ -29,6 +29,13 @@ export class GameScene extends Scene<SpaceInvaders>{
     
     //Diminuzione velocità di tick per livello
     private tickDecreaseRatio = 400;
+
+    //Percentuale di spawn powerup
+    private _powerUpSpawnPercentage = .05;
+    public get powerUpSpawnPercentage() { return this._powerUpSpawnPercentage }
+    //aumento percentuale di spawn power up per livello
+    private powerUpspawnStep = .05;
+
     
     //#endregion
 
@@ -111,6 +118,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
         this.gameController.playAudioLoop("music.mp3");
  
+        this.drawUi();
     }
 
    
@@ -127,6 +135,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
 
     public onUnload(){
+        this.cleanUi();
         return super.onUnload();
     }
 
@@ -239,6 +248,8 @@ export class GameScene extends Scene<SpaceInvaders>{
         else{
             this.currentEnemyRowCount = this.maxEnemyRowCount;
         }
+
+        this._powerUpSpawnPercentage += this.powerUpspawnStep;
     }
     public destroyEl(gameObj: GameObject) {
         if(gameObj instanceof Enemy){
@@ -249,6 +260,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
     public incrementKillCount(){
         this.gameController.killCount ++;
+        this.drawUi();
     }
 
     public playerDie(){
@@ -264,6 +276,30 @@ export class GameScene extends Scene<SpaceInvaders>{
             this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
             this.player2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3*2, this.gameController.mainCanvas.clientHeight - this.player2.size.y/2 - 10))
         }
+    }
+
+
+    private drawUi():void {
+        this.cleanUi();
+        this.gameController.uiContext.textAlign = "left";
+
+        this.gameController.uiContext.textBaseline = "middle";
+        this.gameController.uiContext.fillStyle = "white";
+
+        this.gameController.uiContext.font = "20px Tahoma"
+        this.gameController.uiContext.fillText("Kills: ", 30,30);
+        
+        this.gameController.uiContext.font = "20px Tahoma"
+        this.gameController.uiContext.fillText(this.gameController.killCount + '', 100,30);
+
+        this.gameController.uiContext.font = "20px Tahoma"
+        this.gameController.uiContext.fillText("Level: ", 30,60);
+        this.gameController.uiContext.font = "20px Tahoma"
+        this.gameController.uiContext.fillText(this.currentLevel+'', 100,60);
+    }
+
+    private cleanUi(){
+        this.gameController.clearContext("ui");
     }
 
 }

@@ -2,7 +2,8 @@ import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
-import { PowerUp } from "./PowerUp.js";
+import { RatioPowerUp } from "./RatioPowerUp.js";
+import { DoublePowerUp } from "./DoublePowerUp.js";
 
 export class Enemy extends GameObject{
 
@@ -11,7 +12,6 @@ export class Enemy extends GameObject{
     private currentHealth = this.maxHealth;
 
     // private powerUpspawnPercentage = 0.05;
-    private powerUpspawnPercentage = 1;
 
     public onCollisionEnter(other: GameObject): void {
 
@@ -63,15 +63,19 @@ export class Enemy extends GameObject{
             this.gameController.currentScene.incrementKillCount();
         }
         this.gameController.playAudioOneShot("explosion.wav")
-        if(Math.random() < this.powerUpspawnPercentage){
+        if(this.gameController.currentScene instanceof GameScene&& Math.random() < this.gameController.currentScene.powerUpSpawnPercentage){
             this.spawnPowerUp();
         }
+
         this.destroy();
 
     }
 
     private spawnPowerUp(){
-        const powerUp = this.gameController.currentScene?.istantiateEl(PowerUp);
-        powerUp?.moveAtCentre(this.center);
+        const factory: new(gameController: Game) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
+        const powerUp = this.gameController.currentScene.istantiateEl(factory);
+        powerUp.moveAtCentre(this.center)
     }
+
+
 }

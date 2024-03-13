@@ -38,7 +38,7 @@ export class AudioController{
                 this.currentLoopSource?.stop();
             }
             this.currentLoopSource = this.context.createBufferSource();
-            this.currentLoopSource.buffer = this.arAudioData[this.arSources.findIndex(el => el == assetName)];
+            this.currentLoopSource.buffer = this.findAudio(assetName);
             this.currentLoopSource.loop = true;
             this.currentLoopSource.connect( this.context.destination );
             this.currentLoopSource.start(this.context.currentTime + 0.1);
@@ -91,10 +91,18 @@ export class AudioController{
 
 
         const source = this.context.createBufferSource();
-        source.buffer = this.arAudioData[this.arSources.findIndex(el => el == assetName)];
+        source.buffer = this.findAudio(assetName);
         source.connect( this.context.destination );
         source.start( this.context.currentTime + 0.1 );
               
+    }
+
+    private findAudio(assetName:string): AudioBuffer {
+        const idx = this.arSources.findIndex(el => el == assetName)
+        if(idx < 0){
+            throw Error(`Audio ${assetName} not loaded in memory`);
+        }
+        return this.arAudioData[idx];
     }
 } 
 

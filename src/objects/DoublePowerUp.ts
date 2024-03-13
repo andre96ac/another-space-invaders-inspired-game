@@ -3,14 +3,14 @@ import { GameObject } from "../core/GameObject.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Player } from "./Player.js";
 
-export class PowerUp extends GameObject{
+export class DoublePowerUp extends GameObject{
 
 
     private speed = 2; 
 
     public onCollisionEnter(other: GameObject): void {
         if(other instanceof Player){
-            other.enablePowerUp();
+            other.enableDoublePowerUp();
             this.destroy();
         }
     }
@@ -25,7 +25,7 @@ export class PowerUp extends GameObject{
 
     constructor(gameController: Game){
         super(gameController, "circle", Vector2.zero, Vector2.create(10, 10));
-        this.color = "rgb(0, 255, 153)";
+        this.color = "rgb(255, 255, 0)";
         this.collidable = true;
     }
 

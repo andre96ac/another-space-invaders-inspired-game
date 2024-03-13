@@ -20,6 +20,8 @@ export class Bullet extends GameObject{
         this.moveUp();
     }
     public onLoad(): void {
+            this.gameController.playAudioOneShot("shoot.wav")
+
     }
     public onUnload(): void {
     }
@@ -39,7 +41,10 @@ export class Bullet extends GameObject{
 
     public setPowerUp(){
         this.speed *=2;
-        this.color = "rgb(0, 255, 153)"
+    }
+
+    public setColor(color: string): void{
+        this.color = color;
     }
 
 }

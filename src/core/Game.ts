@@ -98,14 +98,14 @@ export abstract class Game{
         this._uiCanvas.width = this.mainCanvas.width;
         this._uiCanvas.id = "uiCanvas";
         this._uiCanvas.style.setProperty("z-index", "30")
-        this._backCanvas.style.setProperty("position", "absolute");
+        this._uiCanvas.style.setProperty("position", "absolute");
         container.appendChild(this._uiCanvas) ;
 
         this._uiContext = this._uiCanvas.getContext("2d") as CanvasRenderingContext2D;
 
     
         //Setup mouse click check
-        this.mainCanvas.addEventListener("click", (ev) => this.currentScene?.checkButtonClick(ev))
+        this.uiCanvas.addEventListener("click", (ev) => this.currentScene?.checkButtonClick(ev))
 
         this._audioLoaded = this.audioController.loadClips([
             "explosion.wav",
