@@ -45,7 +45,6 @@ export class Enemy extends GameObject{
             if(this.gameController.currentScene instanceof GameScene){
                 this.gameController.currentScene.playerDie();
             }
-            // _this.position =Vector2.create(_this.position.x, _this.gameController.mainCanvas.height - _this.size.y)
         }
     }
 

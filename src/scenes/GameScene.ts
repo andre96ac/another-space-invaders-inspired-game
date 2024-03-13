@@ -33,14 +33,18 @@ export class GameScene extends Scene<SpaceInvaders>{
     //#endregion
 
 
-    //giocatore
-    private player: Player | undefined;
+    //giocatori
+    private player1: Player | undefined;
+    private player2: Player | undefined;
     //nemici
     private enemies: Enemy[] = [];
 
     //stato tasti premuti
     private pressD: boolean = false;
     private pressA: boolean = false;
+    private pressLeft: boolean = false;
+    private pressRight: boolean = false;
+
 
     //nemici massimi per riga
     private maxEnemyRowCount = 20;
@@ -64,11 +68,19 @@ export class GameScene extends Scene<SpaceInvaders>{
 
     public onUpdate() {
         if(this.pressA){
-            this.player?.moveLeft()
+            this.player1?.moveLeft()
         }
         else if(this.pressD){
-            this.player?.moveRight();
+            this.player1?.moveRight();
         }
+
+        if(this.pressLeft){
+            this.player2?.moveLeft();
+        }
+        else if(this.pressRight){
+            this.player2?.moveRight();
+        }
+
         return super.onUpdate();
     }
     public onLoad() {
@@ -78,13 +90,12 @@ export class GameScene extends Scene<SpaceInvaders>{
         //creo l'array con le posizioni dei nemici
         this.initArPositions();
 
+        //creo il giocatore
+        this.initPlayers();
+        
         //registro i listeners sulla tastiera
         this.registerKeyEvents();
-
-        //creo il giocatore
-        this.player = this.istantiateEl(Player);
-        this.player.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player.size.y/2 - 10))
-
+        
         //creo i muri
         this.initWalls()
 
@@ -132,36 +143,25 @@ export class GameScene extends Scene<SpaceInvaders>{
      * Registrazione Listeners sulla tastiera
      */
     private registerKeyEvents(): void{
-        document.addEventListener("keypress", e => {
-            switch (e.key){
-                case 'a':
-                    this.pressA = true;
-                break;
-                case 'd':
-                    this.pressD = true;
-                break;
 
-                case 'p':
-                    if(this.gameController.paused){
-                        this.gameController.resume();
-                    }
-                    else{
-                        this.gameController.pause();
-                    }
-                break;
-            }
-            
-        })
-        document.addEventListener("keyup", e => {
-            if(e.key == 'a'){
-                this.pressA = false;
-            }
-            else if(e.key == 'd'){
-                this.pressD = false;
-            }
-    
-        })
+        this.registerKeyDownListener('a', () => this.pressA = true)
+        this.registerKeyDownListener('d', () => this.pressD = true)
         
+        this.registerKeyUpListener('a', () => this.pressA = false)
+        this.registerKeyUpListener('d', () => this.pressD = false)
+
+
+        if(!!this.player2){
+            this.registerKeyDownListener('ArrowRight', () => this.pressRight = true)
+            this.registerKeyDownListener('ArrowLeft', () => this.pressLeft = true)
+    
+            this.registerKeyUpListener('ArrowRight', () => this.pressRight = false)
+            this.registerKeyUpListener('ArrowLeft', () => this.pressLeft = false)
+        }
+        
+        
+        
+        this.registerKeyDownListener('p', () => this.gameController.paused? this.gameController.resume() : this.gameController.pause())
     }
 
     /**
@@ -253,6 +253,17 @@ export class GameScene extends Scene<SpaceInvaders>{
 
     public playerDie(){
         this.gameController.loadScene(DeathScene)
+    }
+
+    private initPlayers(){
+        this.player1 = this.istantiateEl(Player);
+        this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
+        
+        if(this.gameController.playerNumber > 1){
+            this.player2 = this.istantiateEl(Player);
+            this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
+            this.player2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3*2, this.gameController.mainCanvas.clientHeight - this.player2.size.y/2 - 10))
+        }
     }
 
 }

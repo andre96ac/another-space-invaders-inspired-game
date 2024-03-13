@@ -20,15 +20,25 @@ export class MenuScene extends Scene<SpaceInvaders>{
 
         this.gameController.playAudioLoop("music.mp3")
 
-        const button = this.istantiateEl(Button);
-        button.innerText = "Play";
-        button.font = "Tahoma";
-        button.fontSize = 30;
-        button.color = "rgb(102, 0, 255)"
-        button.size = Vector2.create(300, 50);
-        button.lineWidth = 4;
-        button.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 100))
-        button.onMouseClick = (ev: MouseEvent) => {this.gameController.loadScene(GameScene)}
+        const button1 = this.istantiateEl(Button);
+        button1.innerText = "1 Player";
+        button1.font = "Tahoma";
+        button1.fontSize = 30;
+        button1.color = "rgb(102, 0, 255)"
+        button1.size = Vector2.create(400, 100);
+        button1.lineWidth = 4;
+        button1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 50))
+        button1.onMouseClick = (ev: MouseEvent) => {this.gameController.playerNumber = 1; this.gameController.loadScene(GameScene)}
+
+        const button2 = this.istantiateEl(Button);
+        button2.innerText = "2 Players";
+        button2.font = "Tahoma";
+        button2.fontSize = 30;
+        button2.color = "rgb(102, 0, 255)"
+        button2.size = Vector2.create(300, 50);
+        button2.lineWidth = 4;
+        button2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 200))
+        button2.onMouseClick = (ev: MouseEvent) => {this.gameController.playerNumber = 2; this.gameController.loadScene(GameScene)}
 
         const title = this.istantiateEl(Text)
         title.innerText = "Space Invaders";
@@ -37,7 +47,7 @@ export class MenuScene extends Scene<SpaceInvaders>{
         title.color = "rgb(102, 0, 255)"
         title.lineWidth = 4;
         title.outline = true;
-        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 200))
+        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 150))
         
         
         const box = this.istantiateEl(Primitive)
@@ -48,6 +58,7 @@ export class MenuScene extends Scene<SpaceInvaders>{
         box.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2))
 
 
+        this.addEventListener(document, "keydown", (ev) => console.log(ev.key))
     }
     public onUnload() {
         return super.onUnload();

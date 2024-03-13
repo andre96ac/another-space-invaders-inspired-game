@@ -4,6 +4,8 @@ import { MenuScene } from "./scenes/MenuScene.js";
 export class SpaceInvaders extends Game{
     public killCount = 0;
 
+    public playerNumber = 1;
+
     public onPause(): void {
     }
     public onResume(): void {
