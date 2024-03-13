@@ -105,7 +105,7 @@ export abstract class Game{
 
     
         //Setup mouse click check
-        this.uiCanvas.addEventListener("click", (ev) => this.currentScene?.checkButtonClick(ev))
+        this.uiCanvas.addEventListener("click", (ev) => this.currentScene?.__checkButtonClick(ev))
 
         this._audioLoaded = this.audioController.loadClips([
             "explosion.wav",
@@ -201,8 +201,8 @@ export abstract class Game{
         //Game engine pipeline
         this.clearContext("main");
         this._currentScene?.onUpdate();
-        this._currentScene?.render();
-        this._currentScene?.checkCollisions();
+        this._currentScene?.__render();
+        this._currentScene?.__checkCollisions();
         
         //Setting timestamp for delta time
         this.lastTimestamp = this.currentTimestamp;

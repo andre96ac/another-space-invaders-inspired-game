@@ -89,8 +89,8 @@ export abstract class GameObject<T extends Game>{
      * Override this to draw custom shapes
      * @param context 
      */
-    public render(context: CanvasRenderingContext2D): Symbol{
-        if(!this.hidden){
+    protected render(context: CanvasRenderingContext2D): Symbol{
+        if(this.shape != "custom"){
             context.beginPath();
             context.fillStyle = this.color;
             context.strokeStyle = this.color;
@@ -121,6 +121,21 @@ export abstract class GameObject<T extends Game>{
             }
         return Symbol("Calling super is mandatory");
     }
+
+    /**
+     * Call the rendering function of the object
+     * @param context 
+     * @returns 
+     */
+    public __callRender(context: CanvasRenderingContext2D){
+
+        if(!this.hidden){
+            this.render(context);
+        }
+
+        return Symbol("this method is used to call rendering function and should not be overriden; override \"render\" method instead")
+    }
+    
 
     /**
      * Move the center of gameObject to the specified position

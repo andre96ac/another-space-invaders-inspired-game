@@ -63,18 +63,20 @@ export abstract class Scene<T extends Game>{
 
     /**
      * Main method to draw a scene frame (clear canvas and draw, all the elements into scene)(called in every frame)
+     * THIS METHOD IS CALLED IN MAIN LOOP ALSO IF PRIVATE
      * @param context 
      */
-    public render(){
-        this.gameObjList.forEach(el => el.render(this.gameController.mainContext))
+    public __render(){
+        this.gameObjList.forEach(el => el.__callRender(this.gameController.mainContext))
         return Symbol("this mehtod is called in Game render pipeline and should not be overrided, use update instead")
     }
     
     /**
      * called in every frame; this method check the collision between all collidables and notify the properly event to the objects
+     * THIS METHOD IS CALLED IN MAIN LOOP ALSO IF PRIVATE
      * @returns 
      */
-    public checkCollisions(){
+    public __checkCollisions(){
         for (let idx = 0; idx < this.arCollidables.length; idx++) {
             for (let counter = idx+1; counter < this.arCollidables.length; counter++) {
                 if (this.areColliding(this.arCollidables[idx], this.arCollidables[counter])){
@@ -103,7 +105,7 @@ export abstract class Scene<T extends Game>{
     /**
      * called when a mouse click event is called; notify OnMouseClick event to gameObject overlapping pointer
      */
-    public checkButtonClick(ev: MouseEvent): Symbol{
+    public __checkButtonClick(ev: MouseEvent): Symbol{
         this.arButtons
                         .filter(button => (ev.offsetX > button.position.x && ev.offsetX < button.position.x + button.size.x)&&(ev.offsetY > button.position.y && ev.offsetY < button.position.y + button.size.y))
                         .forEach(el => el.onMouseClick(ev))
@@ -138,7 +140,7 @@ export abstract class Scene<T extends Game>{
      * @param key key to bind
      * @param callback callback to execute
      */
-    public registerKeyDownListener(key: string, callback: (ev: KeyboardEvent) => any):void{
+    protected registerKeyDownListener(key: string, callback: (ev: KeyboardEvent) => any):void{
         document.addEventListener("keydown", (ev) => {
             if(ev.key == key){
                 callback(ev);
@@ -152,7 +154,7 @@ export abstract class Scene<T extends Game>{
      * @param key key to bind
      * @param callback callback to execute
      */
-    public registerKeyUpListener(key: string, callback: (ev: KeyboardEvent) => any):void{
+    protected registerKeyUpListener(key: string, callback: (ev: KeyboardEvent) => any):void{
         document.addEventListener("keyup", (ev) => {
             if(ev.key == key){
                 callback(ev);
@@ -168,7 +170,7 @@ export abstract class Scene<T extends Game>{
      * @param type listener  type
      * @param callback callback fn
      */
-    public addEventListener<K extends keyof GlobalEventHandlersEventMap>(target: EventTarget, type: K, callback: (evt: GlobalEventHandlersEventMap[K]) => void): void{
+    protected addEventListener<K extends keyof GlobalEventHandlersEventMap>(target: EventTarget, type: K, callback: (evt: GlobalEventHandlersEventMap[K]) => void): void{
         // @ts-ignore
         target.addEventListener(type, ev => callback(ev), {signal: this.keyListenerController.signal})
     }
