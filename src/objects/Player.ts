@@ -101,35 +101,34 @@ export class Player extends GameObject<SpaceInvaders>{
     }
 
     public enableRatioPowerUp(){
-        if(!!this.bulletSpawnIntervalPtr){
-            this.ratioActive = true;
-            this.gameController.currentScene.clearInterval(this.bulletSpawnIntervalPtr)
-            this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(true), this.bulletRatio / 3)
-            this.color = this.computedColor;
 
-            if(!!this.removeRatioPowerUpTimeoutPtr){
-                this.gameController.currentScene.clearTimeout(this.removeRatioPowerUpTimeoutPtr)
-            }
 
-            this.removeRatioPowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {
-                if(!! this.bulletSpawnIntervalPtr){
-                    this.gameController.currentScene.clearInterval(this.bulletSpawnIntervalPtr)
-                    this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(), this.bulletRatio)
-                    this.ratioActive = false;
-                    this.color = this.computedColor;
-                }
-                
-            }, this.ratioPowerUpDuration);
+        this.ratioActive = true;
+        this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio / 3)
+        this.color = this.computedColor;
+
+        if(!!this.removeRatioPowerUpTimeoutPtr){
+            this.gameController.currentScene.clearTimeout(this.removeRatioPowerUpTimeoutPtr)
         }
+
+        this.removeRatioPowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {
+
+            this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio);
+            this.ratioActive = false;
+            this.color = this.computedColor;
+            
+        }, this.ratioPowerUpDuration);
+
     }
 
     public enableDoublePowerUp(){
         if(!!this.removeDoublePowerUpTimeoutPtr){
             this.gameController.currentScene.clearTimeout(this.removeDoublePowerUpTimeoutPtr)
         }
+        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration)
+        
         this.doubleShotActive = true;
         this.color = this.computedColor;
-        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration)
     }
 
 

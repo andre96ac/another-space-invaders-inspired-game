@@ -265,7 +265,6 @@ export abstract class Scene<T extends Game>{
      * Called every frame update
      */
     public onUpdate(currentTimestamp: DOMHighResTimeStamp){
-        console.log(this.arTimeouts)
         this.currentTimestamp = currentTimestamp;
         // Call update for every object
         this.gameObjList.forEach(gameObj => gameObj.onUpdate(currentTimestamp))

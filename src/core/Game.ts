@@ -145,7 +145,10 @@ export abstract class Game{
     }
     
     /**
-     * Call onPause, then stop animation frame loop
+     * This function will
+     * call onPause event
+     * set delta time to 0
+     * pause all Scene Intervals and Timeouts if not setted to ignore pause
      */
     public pause(): void{
         if(this.animationCallstackRef != undefined){
@@ -160,8 +163,12 @@ export abstract class Game{
         }
     }
     
+    
     /**
-     * Call onResume, then start animation framae loop
+     * This function will
+     * call onResume event
+     * restore deltaTime
+     * resume all Scene Intervals and Timeouts if not setted to ignore pause
      */
     public resume(): void{
         if(this.paused){

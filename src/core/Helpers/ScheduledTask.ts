@@ -8,7 +8,8 @@ export abstract class ScheduledTask{
 
     private _lastPausedTime: DOMHighResTimeStamp | undefined;
 
-    public readonly delay: number;
+    private _delay: number;
+    public get delay(): number { return this.delay }
 
     public readonly ignorePause: boolean;
 
@@ -22,7 +23,7 @@ export abstract class ScheduledTask{
         this.startExecutionTime = now;
         this._lastExecutionTime = now;
         this.ignorePause = ignorePause;
-        this.delay = delay;
+        this._delay = delay;
 
         this.logNote = logNote;
 
@@ -32,7 +33,7 @@ export abstract class ScheduledTask{
     }
 
     private hasToExecute(now: DOMHighResTimeStamp): boolean{
-        return  (now - this._lastExecutionTime > this.delay) && (!this._lastPausedTime);
+        return  (now - this._lastExecutionTime > this._delay) && (!this._lastPausedTime);
     }
 
     public pause(now: DOMHighResTimeStamp){
@@ -62,6 +63,11 @@ export abstract class ScheduledTask{
         }
         return false
 
+    }
+
+
+    public changeDelay(delay: number){
+        this._delay = delay;
     }
 }
 
