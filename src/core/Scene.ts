@@ -149,15 +149,15 @@ export abstract class Scene<T extends Game>{
     // }
 
 
-    public setInterval(callback: Function, millis: number): ScheduledInterval{
-        const task = new ScheduledInterval(callback, this.currentTimestamp, millis);
+    public setInterval(callback: Function, millis: number, note: string): ScheduledInterval{
+        const task = new ScheduledInterval(callback, this.currentTimestamp, millis, undefined, note);
         this.arIntervals.push(task)
         return task;
         
     }
     
-    public setTimeout(callback: Function, millis: number): ScheduledTimeout{
-        const  task = new ScheduledTimeout(callback, this.currentTimestamp, millis)
+    public setTimeout(callback: Function, millis: number, note: string): ScheduledTimeout{
+        const  task = new ScheduledTimeout(callback, this.currentTimestamp, millis, undefined, note)
         this.arTimeouts.push(task)
         return task;
 
@@ -265,8 +265,7 @@ export abstract class Scene<T extends Game>{
      * Called every frame update
      */
     public onUpdate(currentTimestamp: DOMHighResTimeStamp){
-        console.clear();
-        console.log(this.arTimeouts);
+        console.log(this.arTimeouts)
         this.currentTimestamp = currentTimestamp;
         // Call update for every object
         this.gameObjList.forEach(gameObj => gameObj.onUpdate(currentTimestamp))
@@ -283,17 +282,16 @@ export abstract class Scene<T extends Game>{
 
 
     private runIntervals(now: DOMHighResTimeStamp){
-        const intervalsToRun = this.arIntervals.filter(el => el.hasToExecute(now))
-        intervalsToRun.forEach(interval => {
-            interval.callback();
-            interval.setLastExecution(now);
+        this.arIntervals.forEach(interval => {
+            interval.__run(now);
         })
     }
     private runTimeouts(now: DOMHighResTimeStamp){
-        const timeoutsToRun = this.arTimeouts.filter(el => el.hasToExecute(now))
-        timeoutsToRun.forEach(timeout => {
-            timeout.callback();
-            this.clearTimeout(timeout);
+        this.arTimeouts.forEach(timeout => {
+            const executed = timeout.__run(now);
+            if(executed){
+                this.clearTimeout(timeout);
+            }
         })
     }
 

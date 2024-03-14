@@ -110,7 +110,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
 
         //faccio partire il timer per l'aumento livello
-        this.setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
+        this.setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000, "increase level interval")
 
         //disegno lo sfondo
         this.gameController.drawBackground("background.png");
@@ -230,7 +230,7 @@ export class GameScene extends Scene<SpaceInvaders>{
             }
     
             this.tickInterval = tickInterval;
-            this.intervalPtr = this.setInterval(() => this.tick(), this.tickInterval);
+            this.intervalPtr = this.setInterval(() => this.tick(), this.tickInterval, "Enemies tick interval");
         }
 
     }

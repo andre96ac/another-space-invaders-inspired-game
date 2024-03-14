@@ -22,26 +22,3 @@ export class SpaceInvaders extends Game{
 
 
 }
-
-export class Game2 extends Game{
-    public onStart(): void {
-        throw new Error("Method not implemented.");
-    }
-    public onPause(): void {
-        throw new Error("Method not implemented.");
-    }
-    public onResume(): void {
-        throw new Error("Method not implemented.");
-    }
-    public onExit(): void {
-        throw new Error("Method not implemented.");
-    }
-
-    public myMethod(): boolean{
-        return true;
-    
-    }
-
-    
-
-}

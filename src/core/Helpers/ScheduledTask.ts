@@ -15,34 +15,54 @@ export abstract class ScheduledTask{
     protected abstract _type: "timeout" | "interval";
     public get type(){ return this._type }
 
-    constructor(callback: Function, now: DOMHighResTimeStamp, delay: number, ignorePause: boolean = false){
+    private note: string = "";
+
+    constructor(callback: Function, now: DOMHighResTimeStamp, delay: number, ignorePause: boolean = false, note: string){
         this.callback = callback; 
         this.startExecutionTime = now;
         this._lastExecutionTime = now;
         this.ignorePause = ignorePause;
         this.delay = delay;
 
-
+        this.note = note;
 
     }
-    public setLastExecution(now: DOMHighResTimeStamp){
+    private setLastExecution(now: DOMHighResTimeStamp){
         this._lastExecutionTime = now;
     }
 
-    public hasToExecute(now: DOMHighResTimeStamp): boolean{
-        return  now - this._lastExecutionTime > this.delay;
+    private hasToExecute(now: DOMHighResTimeStamp): boolean{
+        return  (now - this._lastExecutionTime > this.delay) && (!this._lastPausedTime);
     }
 
     public pause(now: DOMHighResTimeStamp){
-        this._lastPausedTime = now;
+        if(!this.ignorePause){
+            this._lastPausedTime = now;
+        }
     }
 
     public resume(now: DOMHighResTimeStamp){
-        if(!!this._lastPausedTime){
-            this._lastExecutionTime += (now - this._lastPausedTime)
-            this._lastPausedTime = undefined;
+        if(!this.ignorePause){
+            if(!!this._lastPausedTime){
+                this._lastExecutionTime += (now - this._lastPausedTime)
+                this._lastPausedTime = undefined;
+            }
         }
     }   
+
+    /**
+     * Check if task has to be executed, execute it if needed, and returns true if task had been executed
+     * @param now 
+     */
+    public __run(now: DOMHighResTimeStamp):boolean{
+        if(this.hasToExecute(now)){
+            this.callback();
+            this.setLastExecution(now);
+            return true;
+        }
+        return false
+
+    }
 }
 
 export class ScheduledTimeout extends ScheduledTask{

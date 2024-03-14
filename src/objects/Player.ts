@@ -46,7 +46,7 @@ export class Player extends GameObject<SpaceInvaders>{
                 //faccio partire il timer degli spari
                 this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => {
                    this.shot();
-                }, this.bulletRatio)
+                }, this.bulletRatio, "Spawn base proiettili")
 
     }
     public onUnload(): void {
@@ -78,7 +78,6 @@ export class Player extends GameObject<SpaceInvaders>{
     }
 
     private shot(doubleSpeed: boolean = false){
-        if(!this.gameController.paused){
             if(this.doubleShotActive){
                 const bullet = this.gameController.currentScene.istantiateEl(Bullet);
                 const bullet2 = this.gameController.currentScene.istantiateEl(Bullet);
@@ -99,14 +98,13 @@ export class Player extends GameObject<SpaceInvaders>{
                 bullet.moveAtCentre(Vector2.create(this.center.x,  this.center.y - this.size.y/2 - bullet.size.y/2));
                 bullet.setColor(this.computedColor)
             }
-        }
     }
 
     public enableRatioPowerUp(){
         if(!!this.bulletSpawnIntervalPtr){
             this.ratioActive = true;
             this.gameController.currentScene.clearInterval(this.bulletSpawnIntervalPtr)
-            this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(true), this.bulletRatio / 3)
+            this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(true), this.bulletRatio / 3, "interval spawn bullet ratio")
             this.color = this.computedColor;
 
             if(!!this.removeRatioPowerUpTimeoutPtr){
@@ -116,12 +114,12 @@ export class Player extends GameObject<SpaceInvaders>{
             this.removeRatioPowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {
                 if(!! this.bulletSpawnIntervalPtr){
                     this.gameController.currentScene.clearInterval(this.bulletSpawnIntervalPtr)
-                    this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(), this.bulletRatio)
+                    this.bulletSpawnIntervalPtr = this.gameController.currentScene.setInterval(() => this.shot(), this.bulletRatio, "resume interval spawn bullets base after ratio")
                     this.ratioActive = false;
                     this.color = this.computedColor;
                 }
                 
-            }, this.ratioPowerUpDuration);
+            }, this.ratioPowerUpDuration, "Timeout rimozione ratiopowerup");
         }
     }
 
@@ -131,7 +129,7 @@ export class Player extends GameObject<SpaceInvaders>{
         }
         this.doubleShotActive = true;
         this.color = this.computedColor;
-        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration)
+        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration, "tiemout rimozione doublepowerup")
     }
 
 

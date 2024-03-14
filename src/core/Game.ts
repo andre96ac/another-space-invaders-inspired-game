@@ -48,6 +48,9 @@ export abstract class Game{
     private lastTimestamp: DOMHighResTimeStamp = 0;
     private currentTimestamp: DOMHighResTimeStamp = 0;
     public get deltaTime(): number{
+        if(this.paused){
+            return 0;
+        }
         return (this.currentTimestamp - this.lastTimestamp)/6;
     }
 
@@ -147,9 +150,9 @@ export abstract class Game{
     public pause(): void{
         if(this.animationCallstackRef != undefined){
             this.onPause(this.currentTimestamp);
-            this.currentScene?.onPause(this.currentTimestamp);
-            window.cancelAnimationFrame(this.animationCallstackRef);
-            this.animationCallstackRef = undefined;
+            this.currentScene.onPause(this.currentTimestamp);
+            // window.cancelAnimationFrame(this.animationCallstackRef);
+            // this.animationCallstackRef = undefined;
             this._paused = true;
         }
         else{
@@ -161,10 +164,10 @@ export abstract class Game{
      * Call onResume, then start animation framae loop
      */
     public resume(): void{
-        if(this.animationCallstackRef == undefined){
-            this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp))
+        if(this.paused){
+            // this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp))
             this.onResume(this.currentTimestamp);
-            this.currentScene?.onResume(this.currentTimestamp);
+            this.currentScene.onResume(this.currentTimestamp);
 
             this._paused = false
         }

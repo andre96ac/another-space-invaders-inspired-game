@@ -1,8 +1,7 @@
-import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Enemy } from "./Enemy.js";
 import { GameObject } from "../core/GameObject.js";
-import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
 
 export class Bullet extends GameObject<SpaceInvaders>{
     public onMouseClick(ev: MouseEvent): void {

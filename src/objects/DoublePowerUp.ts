@@ -1,5 +1,4 @@
-import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
-import { Game } from "../core/Game.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
 import { GameObject } from "../core/GameObject.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Player } from "./Player.js";
