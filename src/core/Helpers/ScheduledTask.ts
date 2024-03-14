@@ -15,16 +15,16 @@ export abstract class ScheduledTask{
     protected abstract _type: "timeout" | "interval";
     public get type(){ return this._type }
 
-    private note: string = "";
+    private logNote: string = "";
 
-    constructor(callback: Function, now: DOMHighResTimeStamp, delay: number, ignorePause: boolean = false, note: string){
+    constructor(callback: Function, now: DOMHighResTimeStamp, delay: number, ignorePause: boolean = false, logNote: string = ""){
         this.callback = callback; 
         this.startExecutionTime = now;
         this._lastExecutionTime = now;
         this.ignorePause = ignorePause;
         this.delay = delay;
 
-        this.note = note;
+        this.logNote = logNote;
 
     }
     private setLastExecution(now: DOMHighResTimeStamp){

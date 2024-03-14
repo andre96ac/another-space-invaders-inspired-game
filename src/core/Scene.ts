@@ -149,15 +149,15 @@ export abstract class Scene<T extends Game>{
     // }
 
 
-    public setInterval(callback: Function, millis: number, note: string): ScheduledInterval{
-        const task = new ScheduledInterval(callback, this.currentTimestamp, millis, undefined, note);
+    public setInterval(callback: Function, millis: number, ignorePause: boolean = false, logNote: string = ""): ScheduledInterval{
+        const task = new ScheduledInterval(callback, this.currentTimestamp, millis, ignorePause, logNote);
         this.arIntervals.push(task)
         return task;
         
     }
     
-    public setTimeout(callback: Function, millis: number, note: string): ScheduledTimeout{
-        const  task = new ScheduledTimeout(callback, this.currentTimestamp, millis, undefined, note)
+    public setTimeout(callback: Function, millis: number, ignorePause: boolean = false, logNote: string = ""): ScheduledTimeout{
+        const  task = new ScheduledTimeout(callback, this.currentTimestamp, millis, ignorePause, logNote)
         this.arTimeouts.push(task)
         return task;
 
