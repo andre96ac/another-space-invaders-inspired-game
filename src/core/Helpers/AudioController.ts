@@ -1,4 +1,7 @@
+import { Game } from "../Game";
+
 export class AudioController{
+    private gameController: Game;
 
     private arSources: string[] = [];
     private arBuffers: ArrayBuffer[] = [];
@@ -9,13 +12,14 @@ export class AudioController{
     private currentLoopSource: AudioBufferSourceNode | undefined;
     private currentLoopPlaying: boolean = false;
 
-    constructor(){
+    constructor(gameController: Game){
+        this.gameController = gameController; 
     }
 
     public loadClips(arAudioNames: string[]): Promise<void>{
         this.arSources = arAudioNames;
 
-        return Promise.all(this.arSources.map(name => fetch(`./assets/${name}`).then(res => res.arrayBuffer())))
+        return Promise.all(this.arSources.map(name => fetch(this.gameController.getAssetPath(name)).then(res => res.arrayBuffer())))
                     .then(buffers => {
                         this.arBuffers = buffers; 
                         return Promise.all(this.arBuffers.map( (buf) => this.context.decodeAudioData( buf )))

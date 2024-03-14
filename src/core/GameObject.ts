@@ -11,7 +11,6 @@ export abstract class GameObject<T extends Game>{
     private _position: Vector2;
     public get position(): Vector2{ return  this._position; }
     protected set position(value: Vector2){
-        // this.checkCollisions();
         this._position = value;
         if(this.destroyOffScreen && this.isOffScreen){
             this.destroy();
@@ -72,6 +71,13 @@ export abstract class GameObject<T extends Game>{
     //line width
     protected lineWidth: number = 1;
 
+    //Sprite source (for "sprites" GameObjects)
+    protected spriteSource: CanvasImageSource | undefined;
+
+    //Z-index
+    public zIndex = 0;
+
+
 
     
 
@@ -85,8 +91,8 @@ export abstract class GameObject<T extends Game>{
 
     /**
      * Main method to draw the element (called every frame)
-     * Will draw circles and squares based on shape property
-     * Override this to draw custom shapes
+     * Will draw circles and squares based on shape property (if set to "custom", super call will draw nothing)
+     * Override this to add drawings to custom behavior (calling super is mandatory)
      * @param context 
      */
     protected render(context: CanvasRenderingContext2D): Symbol{
@@ -98,9 +104,13 @@ export abstract class GameObject<T extends Game>{
             switch (this.shape){
                 case "circle":
                         context.ellipse(Math.round(this._position.x + this.size.x/2) , Math.round(this._position.y + this.size.y/2), Math.round(this._size.x/2), Math.round(this._size.y/2), 0, 0, 360)
+                        this.fill? context.fill() : context.stroke();
+                        
                     break;
                 case "rectangle":
                         context.rect(Math.round(this._position.x), Math.round(this._position.y), Math.round(this._size.x), Math.round(this._size.y));
+                        this.fill? context.fill() : context.stroke();
+
                     break;
 
                 case "triangle":
@@ -109,14 +119,16 @@ export abstract class GameObject<T extends Game>{
                         context.lineTo(this.position.x + this.size.x, this.position.y+this.size.y);
                         context.lineTo(this.position.x + this.size.x/2, this.position.y);
                         context.closePath();
+                        this.fill? context.fill() : context.stroke();
+
                     break;
 
-                }
-                if(this.fill){
-                    context.fill();
-                }
-                else{
-                    context.stroke();
+                case "sprite":
+                        if(!!this.spriteSource){
+                            context.drawImage(this.spriteSource, this.position.x, this.position.y, this.size.x, this.size.y)
+                        }
+                    break;
+
                 }
             }
         return Symbol("Calling super is mandatory");
@@ -142,19 +154,9 @@ export abstract class GameObject<T extends Game>{
      * @param position 
      */
     public moveAtCentre(position: Vector2):void{
-        switch(this.shape){
-            case "circle": 
-                this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
-            break;
-            case "rectangle":
-                this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
-                break;
-                case "triangle":
-                this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
-            break;
-            case "custom": {
-                this.position = Vector2.copy(position);
-            }
+        this.position = Vector2.create(position.x - this._size.x/2, position.y - this._size.y/2)
+        if(this.shape == "custom"){
+            console.warn("Function moveAtCenter called for custom gameObject... This could be an error, should moveAtCenter be overriden?")
         }
     }
 
@@ -184,7 +186,7 @@ export abstract class GameObject<T extends Game>{
     /**
      * Called every frame
      */
-    public abstract onUpdate(): void;
+    public abstract onUpdate(currentTimestamp: DOMHighResTimeStamp): void;
 
     /**
      * Called when the element is destroyed
@@ -196,4 +198,4 @@ export abstract class GameObject<T extends Game>{
 
 }
 
-export type ShapeType = "circle" | "rectangle" | "triangle" | "custom";
+export type ShapeType = "circle" | "rectangle" | "triangle" | "sprite" | "custom";

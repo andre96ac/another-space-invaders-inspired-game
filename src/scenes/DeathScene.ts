@@ -10,8 +10,8 @@ export class DeathScene extends Scene<SpaceInvaders>{
     }
     public onResume(): void {
     }
-    public onUpdate() {
-        return super.onUpdate()
+    public onUpdate(currentTimestamp: DOMHighResTimeStamp) {
+        return super.onUpdate(currentTimestamp)
     }
     public onLoad() {
 

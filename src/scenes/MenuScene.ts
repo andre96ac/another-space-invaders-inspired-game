@@ -11,8 +11,8 @@ export class MenuScene extends Scene<SpaceInvaders>{
     }
     public onResume(): void {
     }
-    public onUpdate() {
-        return super.onUpdate()
+    public onUpdate(timestamp: DOMHighResTimeStamp) {
+        return super.onUpdate(timestamp)
     }
     public onLoad() {
         this.gameController.clearContext("background")

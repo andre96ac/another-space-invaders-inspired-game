@@ -32,7 +32,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     public get powerUpSpawnPercentage() { return this._powerUpSpawnPercentage }
     
     //aumento percentuale di spawn power up per livello
-    private powerUpspawnStep = .03;
+    private powerUpspawnStep = .02;
 
     
     //#endregion
@@ -71,7 +71,7 @@ export class GameScene extends Scene<SpaceInvaders>{
 
 
 
-    public onUpdate() {
+    public onUpdate(timestamp: DOMHighResTimeStamp) {
         if(this.pressA){
             this.player1?.moveLeft()
         }
@@ -86,7 +86,7 @@ export class GameScene extends Scene<SpaceInvaders>{
             this.player2?.moveRight();
         }
 
-        return super.onUpdate();
+        return super.onUpdate(timestamp);
     }
     public onLoad() {
 
@@ -123,6 +123,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private initWalls(){
        
         const box = this.istantiateEl(Primitive)
+        box.zIndex = 100;
         box.color = "white"
         box.lineWidth = 2;
         box.fill = false;

@@ -61,4 +61,8 @@ export class Text<T extends Game> extends GameObject<T>{
 
     }
 
+    public moveAtCentre(position: Vector2): void {
+        this.position = Vector2.copy(position);    
+    }
+
 }

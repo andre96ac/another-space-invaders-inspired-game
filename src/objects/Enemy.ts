@@ -5,6 +5,7 @@ import { GameScene } from "../scenes/GameScene.js";
 import { RatioPowerUp } from "./RatioPowerUp.js";
 import { DoublePowerUp } from "./DoublePowerUp.js";
 import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
+import { SpriteAnimation } from "../core/SpriteAnimation.js";
 
 export class Enemy extends GameObject<SpaceInvaders>{
 
@@ -60,6 +61,7 @@ export class Enemy extends GameObject<SpaceInvaders>{
     }
     
     private die(){
+        this.spawnExplosion();
         if(this.gameController.currentScene instanceof GameScene){
             this.gameController.currentScene.incrementKillCount();
         }
@@ -76,6 +78,22 @@ export class Enemy extends GameObject<SpaceInvaders>{
         const factory: new(gameController: SpaceInvaders) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
         const powerUp = this.gameController.currentScene.istantiateEl(factory);
         powerUp.moveAtCentre(this.center)
+    }
+
+
+
+    private spawnExplosion(){
+        const explosion = this.gameController.currentScene.istantiateEl(SpriteAnimation, this.center);
+        explosion.spriteList = [
+            'explosion_01.png',
+            'explosion_02.png',
+            'explosion_03.png',
+            'explosion_04.png',
+            'explosion_05.png',
+            'explosion_06.png',
+        ]
+        explosion.millisDuration = 600
+        explosion.start();
     }
 
 

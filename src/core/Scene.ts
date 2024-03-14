@@ -1,6 +1,7 @@
 import { Button } from "./Button.js";
 import { Game } from "./Game.js";
 import { GameObject } from "./GameObject.js";
+import { Vector2 } from "./Helpers/Vector2.js";
 
 export abstract class Scene<T extends Game>{
 
@@ -41,8 +42,12 @@ export abstract class Scene<T extends Game>{
      * @param Factory 
      * @returns 
      */
-    public istantiateEl<T2 extends GameObject<T>>(Factory: new (gameController: T)=>T2): T2{
+    public istantiateEl<T2 extends GameObject<T>>(Factory: new (gameController: T)=>T2, position?: Vector2, size?: Vector2): T2{
         const instance: T2 = new Factory(this.gameController)
+
+        if(!!position){
+            instance.moveAtCentre(position);
+        }
         instance.onLoad();
         this.gameObjList.push(instance);
         return instance;
@@ -67,7 +72,7 @@ export abstract class Scene<T extends Game>{
      * @param context 
      */
     public __render(){
-        this.gameObjList.forEach(el => el.__callRender(this.gameController.mainContext))
+        this.gameObjList.sort((el, el2) => el.zIndex - el2.zIndex).forEach(el => el.__callRender(this.gameController.mainContext))
         return Symbol("this mehtod is called in Game render pipeline and should not be overrided, use update instead")
     }
     
@@ -213,9 +218,9 @@ export abstract class Scene<T extends Game>{
     /**
      * Called every frame update
      */
-    public onUpdate(){
+    public onUpdate(currentTimestamp: DOMHighResTimeStamp){
         // Call update for every object
-        this.gameObjList.forEach(gameObj => gameObj.onUpdate())
+        this.gameObjList.forEach(gameObj => gameObj.onUpdate(currentTimestamp))
         return Symbol("calling super is mandatory");
     }
 

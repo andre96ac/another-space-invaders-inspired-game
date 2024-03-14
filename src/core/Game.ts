@@ -4,6 +4,9 @@ import { Scene } from "./Scene.js";
 
 export abstract class Game{
 
+    //Main assets path
+    private _assetsPath: string = "./assets";
+
     //Main Canvas
     private readonly _mainCanvas: HTMLCanvasElement;
     public get mainCanvas(){ return this._mainCanvas}; 
@@ -57,7 +60,7 @@ export abstract class Game{
 
 
     //region audio
-    private audioController: AudioController = new AudioController();
+    private audioController: AudioController = new AudioController(this);
     private readonly _audioLoaded: Promise<void>;
     public get audioLoaded() {return this._audioLoaded}
 
@@ -200,7 +203,7 @@ export abstract class Game{
 
         //Game engine pipeline
         this.clearContext("main");
-        this._currentScene?.onUpdate();
+        this._currentScene?.onUpdate(timestamp);
         this._currentScene?.__render();
         this._currentScene?.__checkCollisions();
         
@@ -252,9 +255,13 @@ export abstract class Game{
     public getImgElFromAssetName(assetName: string): Promise<HTMLImageElement>{
         return new Promise<HTMLImageElement>((resolve, reject) => {
             const imgElem = document.createElement("img");
-            imgElem.src = `./assets/${assetName}`;
+            imgElem.src = this.getAssetPath(assetName);
             imgElem.onload = () => {resolve(imgElem)}
         })
+    }
+
+    public getAssetPath(assetName: string): string{
+        return `${this._assetsPath}/${assetName}`
     }
 
 
