@@ -61,7 +61,6 @@ export class MenuScene extends Scene<SpaceInvaders>{
         box.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2))
 
 
-        this.addEventListener(document, "keydown", (ev) => console.log(ev.key))
     }
     public onUnload() {
         return super.onUnload();

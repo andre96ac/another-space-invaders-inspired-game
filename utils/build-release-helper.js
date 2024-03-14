@@ -2,15 +2,12 @@ import * as fs from 'fs';
 import * as url from 'url';
 
 const FILES_TO_COPY = [
-    "index.html",
-    "style.css",
-    "index.js"
 ]
 const FOLDERS_TO_COPY = [
     "assets"
 ]
 
-const DIST_FOLDER_NAME = "dist";
+const DIST_FOLDER_NAME = "dist-release";
 const SRC_FOLDER_NAME = "src"
 const UTILS_FOLDER_NAME = "utils"
 

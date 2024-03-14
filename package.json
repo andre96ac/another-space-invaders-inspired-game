@@ -4,8 +4,9 @@
   "description": "A simple Space Invaders-style game written in js using canvas",
   "main": "index.js",
   "scripts": {
-    "build": "node ./utils/build-helper.js && tsc",
-    "build-watch": "node ./utils/build-helper.js && tsc --watch"
+    "build": "node ./utils/build-helper.js && tsc --build tsconfig.json",
+    "build-watch": "node ./utils/build-helper.js && tsc --watch tsconfig.json",
+    "build-release": "node ./utils/build-release-helper.js && tsc --build tsconfig-release.json"
   },
   "keywords": [],
   "author": "Andrea Cuppini",
