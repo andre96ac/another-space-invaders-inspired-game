@@ -4,7 +4,7 @@ import { Vector2 } from "../Helpers/Vector2.js";
 
 export class SpriteAnimation<T extends Game> extends GameObject<T>{
 
-    public spriteList: string[] = [];
+    private spriteList: string[] = [];
     private currentSpriteList: string[] = [];
 
     public loop: boolean = false;

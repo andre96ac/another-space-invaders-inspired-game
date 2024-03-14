@@ -82,14 +82,14 @@ export class Enemy extends GameObject<SpaceInvaders>{
 
     private spawnExplosion(){
         const explosion = this.gameController.currentScene.istantiateEl(SpriteAnimation, this.center);
-        explosion.spriteList = [
-            'explosion_01.png',
-            'explosion_02.png',
-            'explosion_03.png',
-            'explosion_04.png',
-            'explosion_05.png',
-            'explosion_06.png',
-        ]
+        explosion.loadAssets([
+            'explosion/1.png',
+            'explosion/2.png',
+            'explosion/3.png',
+            'explosion/4.png',
+            'explosion/5.png',
+            'explosion/6.png',
+        ])
         explosion.millisDuration = 600
         explosion.start();
     }

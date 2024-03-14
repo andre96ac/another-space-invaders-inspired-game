@@ -262,6 +262,11 @@ export abstract class Game{
         })
     }
 
+    /**
+     * Create an htmlimageelement with source setted to te assets
+     * @param assetName path of the asset relative to 'assets' folder example: myfolder/myasset.jpg or myasset.jpg
+     * @returns 
+     */
     public getImgElFromAssetName(assetName: string): Promise<HTMLImageElement>{
         return new Promise<HTMLImageElement>((resolve, reject) => {
             const imgElem = document.createElement("img");
@@ -270,8 +275,14 @@ export abstract class Game{
         })
     }
 
-    public getAssetPath(assetName: string): string{
-        return `${this._assetsPath}/${assetName}`
+
+    /**
+     * Get the full asset path
+     * @param relativeAssetPath path of the asset relative to 'assets' folder example: myfolder/myasset.jpg or myasset.jpg
+     * @returns 
+     */
+    public getAssetPath(relativeAssetPath: string): string{
+        return `${this._assetsPath}/${relativeAssetPath}`
     }
 
 
