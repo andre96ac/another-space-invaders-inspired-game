@@ -2,14 +2,18 @@ import { Button } from "./Prefabs/Button.js";
 import { Game } from "./Game.js";
 import { GameObject } from "./GameObject.js";
 import { Vector2 } from "./Helpers/Vector2.js";
+import { ScheduledInterval, ScheduledTask, ScheduledTimeout } from "./Helpers/ScheduledTask.js";
 
 export abstract class Scene<T extends Game>{
 
     private keyListenerController: AbortController = new AbortController();
 
 
-    private intervalsPtrs: number[] = [];
-    private timeoutsPtrs: number[] = [];
+    // private intervalsPtrs: number[] = [];
+    // private timeoutsPtrs: number[] = [];
+
+    private arTimeouts: ScheduledTimeout[] = [];
+    private arIntervals: ScheduledInterval[] = [];
 
     //Loaded GameObject list
     private gameObjList: GameObject<T>[] = [];
@@ -25,6 +29,8 @@ export abstract class Scene<T extends Game>{
     public get arButtons(): Button<T>[]{
         return this.gameObjList.filter(el => el instanceof Button) as Button<T>[];
     }
+
+    private currentTimestamp: DOMHighResTimeStamp = performance.now();
 
    
 
@@ -61,8 +67,10 @@ export abstract class Scene<T extends Game>{
      */
     public destroyEl(gameObj: GameObject<T>): Symbol{
         const idx = this.gameObjList.findIndex(el => el == gameObj)
-        this.gameObjList[idx].onUnload();
-        this.gameObjList.splice(idx, 1);
+        if(idx >= 0){
+            this.gameObjList[idx].onUnload();
+            this.gameObjList.splice(idx, 1);
+        }
         return Symbol("calling super is mandatory")
     }
 
@@ -123,21 +131,50 @@ export abstract class Scene<T extends Game>{
      * @param callback callback to execute
      * @param millis time
      */
-    public setInterval(callback: Function, millis: number): number{
-        const ptr = setInterval(callback, millis);
-        this.intervalsPtrs.push(ptr);
-        return ptr
-    }
+    // public setInterval(callback: Function, millis: number): number{
+    //     const ptr = setInterval(callback, millis);
+    //     this.intervalsPtrs.push(ptr);
+    //     return ptr
+    // }
 
     /**
      * Set a timeout relative to the scene; all timeouts will be cleared at scene unload
      * @param callback callback to execute
      * @param millis time
      */
-    public setTimeout(callback: Function, millis: number): number{
-        const ptr = setTimeout(callback, millis);
-        this.timeoutsPtrs.push(ptr);
-        return ptr
+    // public setTimeout(callback: Function, millis: number): number{
+    //     const ptr = setTimeout(callback, millis);
+    //     this.timeoutsPtrs.push(ptr);
+    //     return ptr
+    // }
+
+
+    public setInterval(callback: Function, millis: number): ScheduledInterval{
+        const task = new ScheduledInterval(callback, this.currentTimestamp, millis);
+        this.arIntervals.push(task)
+        return task;
+        
+    }
+    
+    public setTimeout(callback: Function, millis: number): ScheduledTimeout{
+        const  task = new ScheduledTimeout(callback, this.currentTimestamp, millis)
+        this.arTimeouts.push(task)
+        return task;
+
+    }
+
+    public clearTimeout(task: ScheduledTimeout){
+        const idx = this.arTimeouts.findIndex(el => el == task)
+        if(idx >= 0){
+            this.arTimeouts.splice(idx, 1)
+        }
+        
+    }
+    public clearInterval(task: ScheduledInterval){
+        const idx = this.arIntervals.findIndex(el => el == task)
+        if(idx >= 0){
+            this.arIntervals.splice(idx, 1)
+        }
     }
 
     /**
@@ -191,12 +228,21 @@ export abstract class Scene<T extends Game>{
     /**
      * Called when the game pause
      */
-    public abstract onPause(): void
-
+    public onPause(currentTimestamp: DOMHighResTimeStamp): Symbol{
+        this.arTimeouts.forEach(el => el.pause(currentTimestamp))
+        this.arIntervals.forEach(el => el.pause(currentTimestamp))
+        return Symbol("Calling super is mandatory")
+    }
+    
     /**
      * Called when the game resume from pause
-     */
-    public abstract onResume(): void
+    */
+   public onResume(currentTimestamp: DOMHighResTimeStamp): Symbol{
+       this.arTimeouts.forEach(el => el.resume(currentTimestamp))
+       this.arIntervals.forEach(el => el.resume(currentTimestamp))
+       
+        return Symbol("Calling super is mandatory")
+    }
 
     /**
      * Called once at scene loading
@@ -208,8 +254,8 @@ export abstract class Scene<T extends Game>{
      */
     public onUnload(): Symbol{
         this.gameObjList.forEach(el => el.destroy())
-        this.timeoutsPtrs.forEach(el => clearTimeout(el))
-        this.intervalsPtrs.forEach(el => clearInterval(el))
+        this.arTimeouts.forEach(el => this.clearTimeout(el))
+        this.arIntervals.forEach(el => this.clearInterval(el))
 
         this.keyListenerController.abort();
         return Symbol("Calling super is mandatory")
@@ -219,12 +265,39 @@ export abstract class Scene<T extends Game>{
      * Called every frame update
      */
     public onUpdate(currentTimestamp: DOMHighResTimeStamp){
+        console.clear();
+        console.log(this.arTimeouts);
+        this.currentTimestamp = currentTimestamp;
         // Call update for every object
         this.gameObjList.forEach(gameObj => gameObj.onUpdate(currentTimestamp))
+
+        // Run intervals and timeouts
+        this.runIntervals(currentTimestamp);
+        this.runTimeouts(currentTimestamp);
+
+
         return Symbol("calling super is mandatory");
     }
 
     //#endregion
+
+
+    private runIntervals(now: DOMHighResTimeStamp){
+        const intervalsToRun = this.arIntervals.filter(el => el.hasToExecute(now))
+        intervalsToRun.forEach(interval => {
+            interval.callback();
+            interval.setLastExecution(now);
+        })
+    }
+    private runTimeouts(now: DOMHighResTimeStamp){
+        const timeoutsToRun = this.arTimeouts.filter(el => el.hasToExecute(now))
+        timeoutsToRun.forEach(timeout => {
+            timeout.callback();
+            this.clearTimeout(timeout);
+        })
+    }
+
+    
     
 
     

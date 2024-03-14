@@ -146,8 +146,8 @@ export abstract class Game{
      */
     public pause(): void{
         if(this.animationCallstackRef != undefined){
-            this.onPause();
-            this.currentScene?.onPause();
+            this.onPause(this.currentTimestamp);
+            this.currentScene?.onPause(this.currentTimestamp);
             window.cancelAnimationFrame(this.animationCallstackRef);
             this.animationCallstackRef = undefined;
             this._paused = true;
@@ -163,8 +163,8 @@ export abstract class Game{
     public resume(): void{
         if(this.animationCallstackRef == undefined){
             this.animationCallstackRef = window.requestAnimationFrame((timestamp: DOMHighResTimeStamp) => this.frame(this, timestamp))
-            this.onResume();
-            this.currentScene?.onResume();
+            this.onResume(this.currentTimestamp);
+            this.currentScene?.onResume(this.currentTimestamp);
 
             this._paused = false
         }
@@ -289,11 +289,11 @@ export abstract class Game{
     /**
      * Called when game paused
      */
-    public abstract onPause(): void;
+    public abstract onPause(currentTimestamp: DOMHighResTimeStamp): void;
     /**
      * Called when game resumed
      */
-    public abstract onResume(): void;
+    public abstract onResume(currentTimestamp: DOMHighResTimeStamp): void;
     /**
      * Called when game exit
      */

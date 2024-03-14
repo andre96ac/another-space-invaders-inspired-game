@@ -1,10 +1,9 @@
-import { Game } from "../core/Game.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
 import { RatioPowerUp } from "./RatioPowerUp.js";
 import { DoublePowerUp } from "./DoublePowerUp.js";
-import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
+import { SpaceInvaders } from "../SpaceInvaders.js";
 import { SpriteAnimation } from "../core/Prefabs/SpriteAnimation.js";
 
 export class Enemy extends GameObject<SpaceInvaders>{
@@ -13,7 +12,6 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private maxHealth = 3;
     private currentHealth = this.maxHealth;
 
-    // private powerUpspawnPercentage = 0.05;
 
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
 

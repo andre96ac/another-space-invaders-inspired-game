@@ -6,9 +6,11 @@ import { MenuScene } from "./MenuScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 
 export class DeathScene extends Scene<SpaceInvaders>{
-    public onPause(): void {
+    public onPause(now: DOMHighResTimeStamp) {
+        return super.onPause(now)
     }
-    public onResume(): void {
+    public onResume(now: DOMHighResTimeStamp) {
+        return super.onResume(now)
     }
     public onUpdate(currentTimestamp: DOMHighResTimeStamp) {
         return super.onUpdate(currentTimestamp)

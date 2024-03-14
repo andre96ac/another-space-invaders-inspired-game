@@ -41,7 +41,11 @@ export abstract class GameObject<T extends Game>{
     //Tag System
     private arTags: string[] = [];
     public hasTag(tag: string): boolean{ return this.arTags.includes(tag); }
-    public removeTag(tag: string){ this.arTags.splice(this.arTags.findIndex(el => el == tag), 1); }
+    public removeTag(tag: string){ 
+        const idx = this.arTags.findIndex(el => el == tag);
+        if(idx >= 0)
+        this.arTags.splice(idx, 1); 
+    }
     public addTag(tag: string): void{
         if(!this.hasTag(tag)){
             this.arTags.push(tag);

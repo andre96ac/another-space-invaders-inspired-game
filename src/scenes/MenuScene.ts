@@ -7,9 +7,11 @@ import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Prefabs/Primitive.js";
 
 export class MenuScene extends Scene<SpaceInvaders>{
-    public onPause(): void {
+    public onPause(now: DOMHighResTimeStamp) {
+        return super.onPause(now)
     }
-    public onResume(): void {
+    public onResume(now: DOMHighResTimeStamp) {
+        return super.onResume(now)
     }
     public onUpdate(timestamp: DOMHighResTimeStamp) {
         return super.onUpdate(timestamp)

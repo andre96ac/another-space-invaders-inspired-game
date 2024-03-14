@@ -6,6 +6,7 @@ import { Scene } from "../core/Scene.js";
 import { DeathScene } from "./DeathScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { Primitive } from "../core/Prefabs/Primitive.js";
+import { ScheduledInterval, ScheduledTask } from "../core/Helpers/ScheduledTask.js";
 
 export class GameScene extends Scene<SpaceInvaders>{
  
@@ -28,7 +29,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private tickDecreaseRatio = 400;
 
     //Percentuale di spawn powerup
-    private _powerUpSpawnPercentage = 0;
+    private _powerUpSpawnPercentage = 1;
     public get powerUpSpawnPercentage() { return this._powerUpSpawnPercentage }
     
     //aumento percentuale di spawn power up per livello
@@ -64,7 +65,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     //intervallo di tick 
     private tickInterval: number | undefined;
     //puntatore al timer
-    private intervalPtr: number | undefined;
+    private intervalPtr: ScheduledInterval | undefined;
     //livello attuale
     private currentLevel: number = 1;
 
@@ -139,11 +140,13 @@ export class GameScene extends Scene<SpaceInvaders>{
     }
 
 
-    public onPause(): void {
+    public onPause(now: DOMHighResTimeStamp) {
         this.gameController.stopAudioLoop();
+        return super.onPause(now);
     }
-    public onResume(): void {
+    public onResume(now: DOMHighResTimeStamp) {
         this.gameController.playAudioLoop();
+        return super.onResume(now);
     }
 
     
@@ -223,7 +226,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private setTick(tickInterval: number){
         if(tickInterval > 0){
             if(!!this.intervalPtr){
-                clearInterval(this.intervalPtr);
+                this.clearInterval(this.intervalPtr);
             }
     
             this.tickInterval = tickInterval;
@@ -249,10 +252,14 @@ export class GameScene extends Scene<SpaceInvaders>{
         }
 
         this._powerUpSpawnPercentage += this.powerUpspawnStep;
+        this.drawUi();
     }
     public destroyEl(gameObj: GameObject<SpaceInvaders>) {
         if(gameObj instanceof Enemy){
-            this.enemies.splice(this.enemies.findIndex(el => gameObj == el), 1)
+            const idx = this.enemies.findIndex(el => gameObj == el);
+            if(idx >= 0 ){
+                this.enemies.splice(idx, 1)
+            }
         }
         return super.destroyEl(gameObj);
     }
