@@ -5,7 +5,7 @@ import { GameScene } from "../scenes/GameScene.js";
 import { RatioPowerUp } from "./RatioPowerUp.js";
 import { DoublePowerUp } from "./DoublePowerUp.js";
 import { Game2, SpaceInvaders } from "../SpaceInvaders.js";
-import { SpriteAnimation } from "../core/SpriteAnimation.js";
+import { SpriteAnimation } from "../core/Prefabs/SpriteAnimation.js";
 
 export class Enemy extends GameObject<SpaceInvaders>{
 

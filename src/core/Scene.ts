@@ -1,4 +1,4 @@
-import { Button } from "./Button.js";
+import { Button } from "./Prefabs/Button.js";
 import { Game } from "./Game.js";
 import { GameObject } from "./GameObject.js";
 import { Vector2 } from "./Helpers/Vector2.js";

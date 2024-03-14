@@ -1,10 +1,10 @@
 import { Scene } from "../core/Scene.js";
-import { Button } from "../core/Button.js";
+import { Button } from "../core/Prefabs/Button.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameScene } from "./GameScene.js";
-import { Text } from "../core/Text.js";
+import { Text } from "../core/Prefabs/Text.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
-import { Primitive } from "../core/Primitive.js";
+import { Primitive } from "../core/Prefabs/Primitive.js";
 
 export class MenuScene extends Scene<SpaceInvaders>{
     public onPause(): void {

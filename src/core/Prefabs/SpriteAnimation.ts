@@ -1,6 +1,6 @@
-import { Game } from "./Game.js";
-import { GameObject } from "./GameObject.js";
-import { Vector2 } from "./Helpers/Vector2.js";
+import { Game } from "../Game.js";
+import { GameObject } from "../GameObject.js";
+import { Vector2 } from "../Helpers/Vector2.js";
 
 export class SpriteAnimation<T extends Game> extends GameObject<T>{
 

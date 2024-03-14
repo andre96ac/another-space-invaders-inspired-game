@@ -1,6 +1,6 @@
-import { Game } from "./Game.js";
-import { GameObject, ShapeType } from "./GameObject.js";
-import { Vector2 } from "./Helpers/Vector2.js";
+import { Game } from "../Game.js";
+import { GameObject, ShapeType } from "../GameObject.js";
+import { Vector2 } from "../Helpers/Vector2.js";
 
 export class Text<T extends Game> extends GameObject<T>{
     public onCollisionEnter(other: GameObject<T>): void {

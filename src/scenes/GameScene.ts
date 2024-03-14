@@ -5,7 +5,7 @@ import { Player } from "../objects/Player.js";
 import { Scene } from "../core/Scene.js";
 import { DeathScene } from "./DeathScene.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
-import { Primitive } from "../core/Primitive.js";
+import { Primitive } from "../core/Prefabs/Primitive.js";
 
 export class GameScene extends Scene<SpaceInvaders>{
  
