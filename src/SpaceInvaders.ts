@@ -21,7 +21,7 @@ export class SpaceInvaders extends Game{
             "powerup.mp3"
         ])
 
-        this.audioLoaded?.then(() => {
+        this.audioLoaded.then(() => {
             this.loadScene(MenuScene);
         })
     }

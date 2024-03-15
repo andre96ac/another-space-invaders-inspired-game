@@ -65,7 +65,14 @@ export abstract class Game{
     //region audio
     private audioController: AudioController = new AudioController(this);
     private _audioLoaded: Promise<void> | undefined;
-    public get audioLoaded() {return this._audioLoaded}
+    public get audioLoaded(): Promise<void> {
+        if(!!this._audioLoaded){
+            return this._audioLoaded
+        }
+        else {
+            throw Error("Audio loading not started; call 'loadAudioClips' before listening for 'audioloaded'")
+        }
+    }
 
     constructor(container: HTMLDivElement){
 
@@ -151,16 +158,11 @@ export abstract class Game{
      * pause all Scene Intervals and Timeouts if not setted to ignore pause
      */
     public pause(): void{
-        if(this.animationCallstackRef != undefined){
             this.onPause(this.currentTimestamp);
             this.currentScene.onPause(this.currentTimestamp);
             // window.cancelAnimationFrame(this.animationCallstackRef);
             // this.animationCallstackRef = undefined;
             this._paused = true;
-        }
-        else{
-            console.error("Error calling pause; game not running")
-        }
     }
     
     
