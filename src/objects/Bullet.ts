@@ -40,7 +40,7 @@ export class Bullet extends GameObject<SpaceInvaders>{
     }
 
     public setPowerUp(){
-        this.speed *=2;
+        this.speed *=1,5;
     }
 
     public setColor(color: string): void{

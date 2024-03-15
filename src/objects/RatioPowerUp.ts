@@ -12,6 +12,7 @@ export class RatioPowerUp extends GameObject<SpaceInvaders>{
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Player){
             other.enableRatioPowerUp();
+            this.gameController.playAudioOneShot("powerup.mp3")
             this.destroy();
         }
     }

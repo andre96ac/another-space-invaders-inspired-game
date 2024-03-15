@@ -64,7 +64,7 @@ export abstract class Game{
 
     //region audio
     private audioController: AudioController = new AudioController(this);
-    private readonly _audioLoaded: Promise<void>;
+    private _audioLoaded: Promise<void> | undefined;
     public get audioLoaded() {return this._audioLoaded}
 
     constructor(container: HTMLDivElement){
@@ -113,12 +113,12 @@ export abstract class Game{
         //Setup mouse click check
         this.uiCanvas.addEventListener("click", (ev) => this.currentScene?.__checkButtonClick(ev))
 
-        this._audioLoaded = this.audioController.loadClips([
-            "explosion.wav",
-            "music.mp3",
-            "shoot.wav"
-        ])
+        
 
+    }
+
+    protected loadAudioClips(clips: string[]){
+        this._audioLoaded = this.audioController.loadClips(clips)
     }
     
 

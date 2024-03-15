@@ -13,7 +13,15 @@ export class SpaceInvaders extends Game{
     public onExit(): void {
     }
     public onStart(): void {
-        this.audioLoaded.then(() => {
+
+        this.loadAudioClips([
+            "explosion.wav",
+            "music.mp3",
+            "shoot.wav",
+            "powerup.mp3"
+        ])
+
+        this.audioLoaded?.then(() => {
             this.loadScene(MenuScene);
         })
     }

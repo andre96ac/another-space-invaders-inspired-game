@@ -11,6 +11,7 @@ export class DoublePowerUp extends GameObject<SpaceInvaders>{
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Player){
             other.enableDoublePowerUp();
+            this.gameController.playAudioOneShot("powerup.mp3")
             this.destroy();
         }
     }

@@ -157,15 +157,17 @@ export class GameScene extends Scene<SpaceInvaders>{
 
         this.registerKeyDownListener('a', () => this.pressA = true)
         this.registerKeyDownListener('d', () => this.pressD = true)
+        this.registerKeyDownListener('w', () => this.player1?.jump())
         
         this.registerKeyUpListener('a', () => this.pressA = false)
         this.registerKeyUpListener('d', () => this.pressD = false)
-
-
+        
+        
         if(!!this.player2){
             this.registerKeyDownListener('ArrowRight', () => this.pressRight = true)
             this.registerKeyDownListener('ArrowLeft', () => this.pressLeft = true)
-    
+            this.registerKeyDownListener('ArrowUp', () => this.player2?.jump())
+            
             this.registerKeyUpListener('ArrowRight', () => this.pressRight = false)
             this.registerKeyUpListener('ArrowLeft', () => this.pressLeft = false)
         }

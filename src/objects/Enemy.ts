@@ -5,6 +5,7 @@ import { RatioPowerUp } from "./RatioPowerUp.js";
 import { DoublePowerUp } from "./DoublePowerUp.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { SpriteAnimation } from "../core/Prefabs/SpriteAnimation.js";
+import { Player } from "./Player.js";
 
 export class Enemy extends GameObject<SpaceInvaders>{
 
@@ -13,9 +14,6 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private currentHealth = this.maxHealth;
 
 
-    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
-
-    }
     public onUpdate(): void {
     }
     public onLoad(): void {
@@ -35,6 +33,15 @@ export class Enemy extends GameObject<SpaceInvaders>{
         this._enemyStep = this.size.x + 20
         this.collidable = true;
         this.color = "rgb(255, 51, 153)";
+
+    }
+
+    
+    public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
+
+        if(other instanceof Player && this.gameController.currentScene instanceof GameScene){
+            this.gameController.currentScene.playerDie();
+        }
 
     }
 
@@ -62,11 +69,11 @@ export class Enemy extends GameObject<SpaceInvaders>{
         this.spawnExplosion();
         if(this.gameController.currentScene instanceof GameScene){
             this.gameController.currentScene.incrementKillCount();
+            if(Math.random() < this.gameController.currentScene.powerUpSpawnPercentage){
+                this.spawnPowerUp();
+            }
         }
         this.gameController.playAudioOneShot("explosion.wav")
-        if(this.gameController.currentScene instanceof GameScene&& Math.random() < this.gameController.currentScene.powerUpSpawnPercentage){
-            this.spawnPowerUp();
-        }
 
         this.destroy();
 
@@ -83,14 +90,22 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private spawnExplosion(){
         const explosion = this.gameController.currentScene.istantiateEl(SpriteAnimation, this.center);
         explosion.loadAssets([
-            'explosion/1.png',
-            'explosion/2.png',
-            'explosion/3.png',
-            'explosion/4.png',
-            'explosion/5.png',
-            'explosion/6.png',
+            'explosion3/ (1).png',
+            'explosion3/ (2).png',
+            'explosion3/ (3).png',
+            'explosion3/ (4).png',
+            'explosion3/ (5).png',
+            'explosion3/ (6).png',
+            'explosion3/ (7).png',
+            'explosion3/ (8).png',
+            'explosion3/ (9).png',
+            'explosion3/ (10).png',
+            'explosion3/ (11).png',
+            'explosion3/ (12).png',
+            'explosion3/ (13).png',
+            'explosion3/ (14).png',
         ])
-        explosion.millisDuration = 600
+        explosion.millisDuration = 400
         explosion.start();
     }
 
