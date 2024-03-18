@@ -38,7 +38,7 @@ export class Enemy extends GameObject<SpaceInvaders>{
         super(gameController, "rectangle", Vector2.zero, enemySize);
         this._enemyStep = this.size.x + 20
         this.collidable = true;
-        this.color = "coral";
+        this.color = "#00c0b7";
         this.lineWidth = 2
 
     }
@@ -97,22 +97,22 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private spawnExplosion(){
         const explosion = this.gameController.currentScene.istantiateEl(SpriteAnimation, this.center);
         explosion.loadAssets([
-            'explosion3/ (1).png',
-            'explosion3/ (2).png',
-            'explosion3/ (3).png',
-            'explosion3/ (4).png',
-            'explosion3/ (5).png',
-            'explosion3/ (6).png',
-            'explosion3/ (7).png',
-            'explosion3/ (8).png',
-            'explosion3/ (9).png',
-            'explosion3/ (10).png',
-            'explosion3/ (11).png',
-            'explosion3/ (12).png',
-            'explosion3/ (13).png',
-            'explosion3/ (14).png',
+            'explosion/ (1).png',
+            'explosion/ (2).png',
+            'explosion/ (3).png',
+            'explosion/ (4).png',
+            'explosion/ (5).png',
+            'explosion/ (6).png',
+            'explosion/ (7).png',
+            'explosion/ (8).png',
+            'explosion/ (9).png',
+            'explosion/ (10).png',
+            'explosion/ (11).png',
+            'explosion/ (12).png',
+            'explosion/ (13).png',
+            'explosion/ (14).png',
         ])
-        explosion.millisDuration = 400
+        explosion.millisDuration = 300
         explosion.start();
     }
 

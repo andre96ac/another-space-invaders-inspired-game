@@ -23,7 +23,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private increaseEnemyRatio = 0.5;
 
     //Velocità di tick iniziale
-    private startTickInterval = 4600;
+    private startTickInterval = 5000;
     
     //Diminuzione velocità di tick per livello
     private tickDecreaseRatio = 400;
@@ -277,7 +277,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private initPlayers(){
         this.player1 = this.istantiateEl(Player);
         this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
-        this.player1.setColor("Aquamarine")
+        this.player1.setColor("coral")
         
         if(this.gameController.playerNumber > 1){
             this.player2 = this.istantiateEl(Player);
