@@ -34,16 +34,7 @@ export class Player extends GameObject<SpaceInvaders>{
     private jumpHeightTime: number = 200 ;
     private jumpSpeed: number = 3;
 
-    private get computedColor(): string{
-        if(this.doubleShotActive && this.ratioActive)
-            return 'rgb(0, 255, 0)'
-        else if(this.doubleShotActive)
-            return 'rgb(255, 255, 0)'
-        else if(this.ratioActive)
-            return 'rgb(0, 255, 153)'
-        else    
-            return 'white'
-    }
+    
 
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
     }
@@ -84,6 +75,7 @@ export class Player extends GameObject<SpaceInvaders>{
         super(gameController, "triangle", Vector2.zero, Vector2.create(playerSize, playerSize));
         this.color = "white"
         this.collidable = true;
+        this.lineWidth = 2;
     }
 
     public moveRight(){
@@ -120,10 +112,10 @@ export class Player extends GameObject<SpaceInvaders>{
                 bullet2.moveAtCentre(Vector2.create(this.center.x + 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
                 bullet4.moveAtCentre(Vector2.create(this.center.x + 15,  this.center.y - this.size.y/2 - bullet.size.y/2));
                 
-                bullet.setColor(this.computedColor)
-                bullet2.setColor(this.computedColor)
-                bullet3.setColor(this.computedColor)
-                bullet4.setColor(this.computedColor)
+                bullet.setColor(this.color)
+                bullet2.setColor(this.color)
+                bullet3.setColor(this.color)
+                bullet4.setColor(this.color)
             }
             else if(this.doubleShotActive){
                 const bullet = this.gameController.currentScene.istantiateEl(Bullet);
@@ -131,8 +123,8 @@ export class Player extends GameObject<SpaceInvaders>{
                 
                 bullet.moveAtCentre(Vector2.create(this.center.x - 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
                 bullet2.moveAtCentre(Vector2.create(this.center.x + 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
-                bullet.setColor(this.computedColor)
-                bullet2.setColor(this.computedColor)
+                bullet.setColor(this.color)
+                bullet2.setColor(this.color)
             }
             else{
                 const bullet = this.gameController.currentScene.istantiateEl(Bullet);
@@ -140,7 +132,7 @@ export class Player extends GameObject<SpaceInvaders>{
                     bullet.setPowerUp();
                 }
                 bullet.moveAtCentre(Vector2.create(this.center.x,  this.center.y - this.size.y/2 - bullet.size.y/2));
-                bullet.setColor(this.computedColor)
+                bullet.setColor(this.color)
             }
     }
 
@@ -149,7 +141,6 @@ export class Player extends GameObject<SpaceInvaders>{
 
         this.ratioActive = true;
         this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio / 3)
-        this.color = this.computedColor;
 
         if(!!this.removeRatioPowerUpTimeoutPtr){
             this.gameController.currentScene.clearTimeout(this.removeRatioPowerUpTimeoutPtr)
@@ -159,7 +150,6 @@ export class Player extends GameObject<SpaceInvaders>{
 
             this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio);
             this.ratioActive = false;
-            this.color = this.computedColor;
             
         }, this.ratioPowerUpDuration);
 
@@ -169,10 +159,9 @@ export class Player extends GameObject<SpaceInvaders>{
         if(!!this.removeDoublePowerUpTimeoutPtr){
             this.gameController.currentScene.clearTimeout(this.removeDoublePowerUpTimeoutPtr)
         }
-        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false; this.color = this.computedColor}, this.doublePowerUpDuration)
+        this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false}, this.doublePowerUpDuration)
         
         this.doubleShotActive = true;
-        this.color = this.computedColor;
     }
 
 
@@ -182,6 +171,10 @@ export class Player extends GameObject<SpaceInvaders>{
             this.isJumping = true;
             this.gameController.currentScene.setTimeout(() => this.isJumpingUp = false, this.jumpHeightTime)
         }
+    }
+
+    public setColor(color: string){
+        this.color = color;
     }
 
 

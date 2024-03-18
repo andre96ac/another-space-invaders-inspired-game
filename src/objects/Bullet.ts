@@ -29,6 +29,7 @@ export class Bullet extends GameObject<SpaceInvaders>{
         super(gameController, "circle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
         this.color = "white"
+        this.lineWidth = 2;
     }
 
 

@@ -23,7 +23,7 @@ export class GameScene extends Scene<SpaceInvaders>{
     private increaseEnemyRatio = 0.5;
 
     //Velocità di tick iniziale
-    private startTickInterval = 5000;
+    private startTickInterval = 4600;
     
     //Diminuzione velocità di tick per livello
     private tickDecreaseRatio = 400;
@@ -113,7 +113,7 @@ export class GameScene extends Scene<SpaceInvaders>{
         this.setInterval(() => this.increaseLevel(), this.secondsPerLevel*1000)
 
         //disegno lo sfondo
-        this.gameController.drawBackground("background.png");
+        this.gameController.drawBackground("background4.png");
 
         this.gameController.playAudioLoop("music.mp3");
  
@@ -182,11 +182,9 @@ export class GameScene extends Scene<SpaceInvaders>{
      */
     private initArPositions(): void{
 
-        this.enemySample = new Enemy(this.gameController);
-        delete this.enemySample
-
-        const step = this.gameController.mainCanvas.width / this.maxEnemyRowCount;
-        const start = step/2;
+        const screenOffset = 5;
+        const step = (this.gameController.mainCanvas.width - screenOffset*2) / this.maxEnemyRowCount;
+        const start = step/2 + screenOffset;
         for (let index = 0; index < this.maxEnemyRowCount; index++) {
             this.arPositions.push(step * index + start);
             
@@ -198,6 +196,7 @@ export class GameScene extends Scene<SpaceInvaders>{
      * Spawna una riga di nemici
      */
     private spawnEnemyRow(){
+        // const enemyCount = this.maxEnemyRowCount;
         const enemyCount = Math.random() * this.currentEnemyRowCount
         const arPositionsCopy = [...this.arPositions];
         for (let counter = 0; counter < enemyCount; counter++) {
@@ -278,9 +277,11 @@ export class GameScene extends Scene<SpaceInvaders>{
     private initPlayers(){
         this.player1 = this.istantiateEl(Player);
         this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/2, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
+        this.player1.setColor("Aquamarine")
         
         if(this.gameController.playerNumber > 1){
             this.player2 = this.istantiateEl(Player);
+            this.player2.setColor("DeepPink")
             this.player1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3, this.gameController.mainCanvas.clientHeight - this.player1.size.y/2 - 10))
             this.player2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.clientWidth/3*2, this.gameController.mainCanvas.clientHeight - this.player2.size.y/2 - 10))
         }
