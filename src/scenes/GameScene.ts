@@ -14,26 +14,26 @@ export class GameScene extends Scene<SpaceInvaders>{
     
     
     //tempo per ogni livello
-    private secondsPerLevel: number = 30;
+    private secondsPerLevel: number = 15;
 
     //Nemici massimi iniziali per riga 
     private starMaxEnemiesPerRow = 1;
 
     //Aumento di nemici massimi per riga per livello
-    private increaseEnemyRatio = 0.5;
+    private increaseEnemyRatio = 0.25;
 
     //Velocità di tick iniziale
     private startTickInterval = 5000;
     
     //Diminuzione velocità di tick per livello
-    private tickDecreaseRatio = 400;
+    private tickDecreaseRatio = 200;
 
     //Percentuale di spawn powerup
     private _powerUpSpawnPercentage = 0;
     public get powerUpSpawnPercentage() { return this._powerUpSpawnPercentage }
     
     //aumento percentuale di spawn power up per livello
-    private powerUpspawnStep = .03;
+    private powerUpspawnStep = .01;
 
     
     //#endregion
