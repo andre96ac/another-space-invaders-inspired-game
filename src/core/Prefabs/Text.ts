@@ -50,6 +50,7 @@ export class Text<T extends Game> extends GameObject<T>{
         context.textAlign = "center"
         context.textBaseline = "middle"
         context.font = `${this.fontSize}px ${this.font}`
+        context.lineWidth = this.lineWidth;
         if(this.outline){
             context.strokeText(this.innerText, this.position.x, this.position.y)
         }
