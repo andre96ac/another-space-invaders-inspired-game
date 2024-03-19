@@ -146,7 +146,6 @@ export class Player extends GameObject<SpaceInvaders>{
     }
 
     private shot(){
-        this.shotNumber = 8;
         for(let i = 0; i<this.shotNumber; i++){
                 const bullet = this.gameController.currentScene.istantiateEl(Bullet);
                 bullet.damage = this.damage;

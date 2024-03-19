@@ -92,8 +92,8 @@ export class Enemy extends GameObject<SpaceInvaders>{
                             | RatioPowerUp
                             | DamagePowerUp
         const powerUps = [
-            // MultiShotPowerUp,
-            // RatioPowerUp,
+            MultiShotPowerUp,
+            RatioPowerUp,
             DamagePowerUp
         ]
 
