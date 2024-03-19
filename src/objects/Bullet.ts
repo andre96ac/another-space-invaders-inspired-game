@@ -8,13 +8,21 @@ export class Bullet extends GameObject<SpaceInvaders>{
     }
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Enemy){
-            other.hit();
+            other.hit(this.damage);
             this.destroy();
         }
 
     }
 
     private speed = 6;
+    private _damage = 1;
+    public get damage(): number {return this._damage }
+    public set damage(value: number) {
+        this._damage = value;
+
+        const newSize = 4 +2*this._damage;
+        this.size = Vector2.create(newSize, newSize)
+    }
 
     public onUpdate(): void {
         this.moveUp();
@@ -26,11 +34,15 @@ export class Bullet extends GameObject<SpaceInvaders>{
     public onUnload(): void {
     }
     constructor(gameController: SpaceInvaders){
+
+
         super(gameController, "circle", Vector2.zero, Vector2.create(6,6));
         this.collidable = true;
         this.color = "white"
         this.lineWidth = 2;
     }
+
+    
 
 
 

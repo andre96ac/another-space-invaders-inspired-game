@@ -6,6 +6,7 @@ import { MultiShotPowerUp } from "./MultiShotPowerUp.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { SpriteAnimation } from "../core/Prefabs/SpriteAnimation.js";
 import { Player } from "./Player.js";
+import { DamagePowerUp } from "./DamagePowerUp.js";
 
 export class Enemy extends GameObject<SpaceInvaders>{
 
@@ -63,9 +64,9 @@ export class Enemy extends GameObject<SpaceInvaders>{
         }
     }
 
-    public hit(){
-        if(this.currentHealth > 0){
-            this.currentHealth --;
+    public hit(damage: number){
+        if(this.currentHealth - damage > 0){
+            this.currentHealth -= damage;
         }
         else{
             this.die()
@@ -89,10 +90,11 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private spawnPowerUp(){
         type TPowerUp =     MultiShotPowerUp 
                             | RatioPowerUp
-        // const factory: new(gameController: SpaceInvaders) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
+                            | DamagePowerUp
         const powerUps = [
-            MultiShotPowerUp,
-            RatioPowerUp
+            // MultiShotPowerUp,
+            // RatioPowerUp,
+            DamagePowerUp
         ]
 
         const choose = Math.floor(Math.random() * powerUps.length)

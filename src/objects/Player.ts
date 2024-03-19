@@ -13,17 +13,6 @@ export class Player extends GameObject<SpaceInvaders>{
     //bullet spawn interval
     private bulletSpawnIntervalPtr: undefined | ScheduledInterval;
 
-    //Player Speed
-
-    // private ratioPowerUpDuration: number = 10000;
-    // private doublePowerUpDuration: number = 10000;
-
-    // private removeRatioPowerUpTimeoutPtr : undefined | ScheduledTimeout;
-    // private removeDoublePowerUpTimeoutPtr : undefined | ScheduledTimeout;
-
-    // private doubleShotActive: boolean = false; 
-    // private ratioActive: boolean = false; 
-
     private startHeight: number = 0;
 
     private isJumpingUp:boolean = false;
@@ -49,7 +38,6 @@ export class Player extends GameObject<SpaceInvaders>{
 
 
 
-    
     private _shotSpeed : number = 6;
     public get shotSpeed() : number {
         return this._shotSpeed;
@@ -58,6 +46,7 @@ export class Player extends GameObject<SpaceInvaders>{
         this._shotSpeed = v;
     }
     
+
 
     public readonly arShotNumberTimeouts: ScheduledTimeout[] = [];
     private _shotNumber : number = 1;
@@ -68,6 +57,18 @@ export class Player extends GameObject<SpaceInvaders>{
     public set shotNumber(value: number){
 
         this._shotNumber = value;
+    } 
+
+    
+    public readonly arShotDamageTimeouts: ScheduledTimeout[] = [];
+    private _damage : number = 1;
+    public get damage() : number {
+        return this._damage;
+    }
+
+    public set damage(value: number){
+
+        this._damage = value;
     } 
     
 
@@ -145,10 +146,11 @@ export class Player extends GameObject<SpaceInvaders>{
     }
 
     private shot(){
-            const bulletsSpace = 5;
-
-            for(let i = 0; i<this.shotNumber; i++){
+        this.shotNumber = 8;
+        for(let i = 0; i<this.shotNumber; i++){
                 const bullet = this.gameController.currentScene.istantiateEl(Bullet);
+                bullet.damage = this.damage;
+                const bulletsSpace = bullet.size.x - 1;
                 bullet.setSpeed(this.shotSpeed);
                 const bulletOffsetX = this.shotNumber%2 == 0? (-(bulletsSpace * (this.shotNumber - 1)) + bulletsSpace * 2 * i) : (-((this.shotNumber - 1) * bulletsSpace) + bulletsSpace * 2 * i)
                 bullet.moveAtCentre(Vector2.create(this.center.x - bulletOffsetX,  this.center.y - this.size.y/2 - bullet.size.y/2));
@@ -157,73 +159,8 @@ export class Player extends GameObject<SpaceInvaders>{
 
             }
 
-            // if(this.doubleShotActive && this.ratioActive){
-            //     const bullet = this.gameController.currentScene.istantiateEl(Bullet);
-            //     const bullet2 = this.gameController.currentScene.istantiateEl(Bullet);
-            //     const bullet3 = this.gameController.currentScene.istantiateEl(Bullet);
-            //     const bullet4 = this.gameController.currentScene.istantiateEl(Bullet);
-
-            //     bullet.setPowerUp();
-            //     bullet2.setPowerUp();
-            //     bullet3.setPowerUp();
-            //     bullet4.setPowerUp();
-                
-            //     bullet.moveAtCentre(Vector2.create(this.center.x - 15,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet3.moveAtCentre(Vector2.create(this.center.x - 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet2.moveAtCentre(Vector2.create(this.center.x + 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet4.moveAtCentre(Vector2.create(this.center.x + 15,  this.center.y - this.size.y/2 - bullet.size.y/2));
-                
-            //     bullet.setColor(this.color)
-            //     bullet2.setColor(this.color)
-            //     bullet3.setColor(this.color)
-            //     bullet4.setColor(this.color)
-            // }
-            // else if(this.doubleShotActive){
-            //     const bullet = this.gameController.currentScene.istantiateEl(Bullet);
-            //     const bullet2 = this.gameController.currentScene.istantiateEl(Bullet);
-                
-            //     bullet.moveAtCentre(Vector2.create(this.center.x - 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet2.moveAtCentre(Vector2.create(this.center.x + 5,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet.setColor(this.color)
-            //     bullet2.setColor(this.color)
-            // }
-            // else{
-            //     const bullet = this.gameController.currentScene.istantiateEl(Bullet);
-            //     if(this.ratioActive){
-            //         bullet.setPowerUp();
-            //     }
-            //     bullet.moveAtCentre(Vector2.create(this.center.x,  this.center.y - this.size.y/2 - bullet.size.y/2));
-            //     bullet.setColor(this.color)
-            // }
     }
 
-    // public enableRatioPowerUp(){
-
-
-    //     this.ratioActive = true;
-    //     this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio / 3)
-
-    //     if(!!this.removeRatioPowerUpTimeoutPtr){
-    //         this.gameController.currentScene.clearTimeout(this.removeRatioPowerUpTimeoutPtr)
-    //     }
-
-    //     this.removeRatioPowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {
-
-    //         this.bulletSpawnIntervalPtr?.changeDelay(this.bulletRatio);
-    //         this.ratioActive = false;
-            
-    //     }, this.ratioPowerUpDuration);
-
-    // }
-
-    // public enableDoublePowerUp(){
-    //     if(!!this.removeDoublePowerUpTimeoutPtr){
-    //         this.gameController.currentScene.clearTimeout(this.removeDoublePowerUpTimeoutPtr)
-    //     }
-    //     this.removeDoublePowerUpTimeoutPtr = this.gameController.currentScene.setTimeout(() => {this.doubleShotActive = false}, this.doublePowerUpDuration)
-        
-    //     this.doubleShotActive = true;
-    // }
 
 
     public jump(){
