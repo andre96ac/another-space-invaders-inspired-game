@@ -177,6 +177,10 @@ export abstract class Scene<T extends Game>{
         }
     }
 
+    public resetTimeout(task: ScheduledTimeout){
+        task.reset(this.currentTimestamp);
+    }
+
     /**
      * Register a SAFE callback when key is pressed; listener will be removed at scene unload 
      * @param key key to bind
@@ -265,6 +269,8 @@ export abstract class Scene<T extends Game>{
      * Called every frame update
      */
     public onUpdate(currentTimestamp: DOMHighResTimeStamp){
+
+
         this.currentTimestamp = currentTimestamp;
         // Call update for every object
         this.gameObjList.forEach(gameObj => gameObj.onUpdate(currentTimestamp))

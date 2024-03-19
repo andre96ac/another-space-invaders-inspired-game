@@ -1,7 +1,8 @@
 export abstract class ScheduledTask{
     public readonly guid: string = crypto.randomUUID();
     public readonly callback: Function
-    public readonly startExecutionTime: DOMHighResTimeStamp;
+    private _startExecutionTime: DOMHighResTimeStamp;
+    public get startExecutiontime(): DOMHighResTimeStamp{ return this._startExecutionTime }
 
     private _lastExecutionTime: DOMHighResTimeStamp;
     public get lastExecutionTime() { return this._lastExecutionTime };
@@ -9,7 +10,7 @@ export abstract class ScheduledTask{
     private _lastPausedTime: DOMHighResTimeStamp | undefined;
 
     private _delay: number;
-    public get delay(): number { return this.delay }
+    public get delay(): number { return this._delay }
 
     public readonly ignorePause: boolean;
 
@@ -20,7 +21,7 @@ export abstract class ScheduledTask{
 
     constructor(callback: Function, now: DOMHighResTimeStamp, delay: number, ignorePause: boolean = false, logNote: string = ""){
         this.callback = callback; 
-        this.startExecutionTime = now;
+        this._startExecutionTime = now;
         this._lastExecutionTime = now;
         this.ignorePause = ignorePause;
         this._delay = delay;
@@ -63,6 +64,11 @@ export abstract class ScheduledTask{
         }
         return false
 
+    }
+
+    public reset(now: DOMHighResTimeStamp){
+        this._startExecutionTime = now;
+        this._lastExecutionTime = now;
     }
 
 

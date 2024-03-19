@@ -2,7 +2,7 @@ import { Vector2 } from "../core/Helpers/Vector2.js";
 import { GameObject } from "../core/GameObject.js";
 import { GameScene } from "../scenes/GameScene.js";
 import { RatioPowerUp } from "./RatioPowerUp.js";
-import { DoublePowerUp } from "./DoublePowerUp.js";
+import { MultiShotPowerUp } from "./MultiShotPowerUp.js";
 import { SpaceInvaders } from "../SpaceInvaders.js";
 import { SpriteAnimation } from "../core/Prefabs/SpriteAnimation.js";
 import { Player } from "./Player.js";
@@ -87,8 +87,19 @@ export class Enemy extends GameObject<SpaceInvaders>{
     }
 
     private spawnPowerUp(){
-        const factory: new(gameController: SpaceInvaders) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
-        const powerUp = this.gameController.currentScene.istantiateEl(factory);
+        type TPowerUp =     MultiShotPowerUp 
+                            | RatioPowerUp
+        // const factory: new(gameController: SpaceInvaders) => DoublePowerUp | RatioPowerUp = Math.random() <= 0.5? DoublePowerUp : RatioPowerUp;
+        const powerUps = [
+            MultiShotPowerUp,
+            RatioPowerUp
+        ]
+
+        const choose = Math.floor(Math.random() * powerUps.length)
+        
+        
+        const factory = powerUps[choose]
+        const powerUp = this.gameController.currentScene.istantiateEl<TPowerUp>(factory);
         powerUp.moveAtCentre(this.center)
     }
 
@@ -97,20 +108,20 @@ export class Enemy extends GameObject<SpaceInvaders>{
     private spawnExplosion(){
         const explosion = this.gameController.currentScene.istantiateEl(SpriteAnimation, this.center);
         explosion.loadAssets([
-            'explosion/ (1).png',
-            'explosion/ (2).png',
-            'explosion/ (3).png',
-            'explosion/ (4).png',
-            'explosion/ (5).png',
-            'explosion/ (6).png',
-            'explosion/ (7).png',
-            'explosion/ (8).png',
-            'explosion/ (9).png',
-            'explosion/ (10).png',
-            'explosion/ (11).png',
-            'explosion/ (12).png',
-            'explosion/ (13).png',
-            'explosion/ (14).png',
+            'explosion/_(1).png',
+            'explosion/_(2).png',
+            'explosion/_(3).png',
+            'explosion/_(4).png',
+            'explosion/_(5).png',
+            'explosion/_(6).png',
+            'explosion/_(7).png',
+            'explosion/_(8).png',
+            'explosion/_(9).png',
+            'explosion/_(10).png',
+            'explosion/_(11).png',
+            'explosion/_(12).png',
+            'explosion/_(13).png',
+            'explosion/_(14).png',
         ])
         explosion.millisDuration = 300
         explosion.start();

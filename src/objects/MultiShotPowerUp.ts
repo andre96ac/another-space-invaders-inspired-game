@@ -3,17 +3,36 @@ import { GameObject } from "../core/GameObject.js";
 import { Vector2 } from "../core/Helpers/Vector2.js";
 import { Player } from "./Player.js";
 
-export class DoublePowerUp extends GameObject<SpaceInvaders>{
+export class MultiShotPowerUp extends GameObject<SpaceInvaders>{
 
 
     private speed = 2; 
 
+    private duration: number = 10000;
+
+    private increaseOf: number = 1;
+
     public onCollisionEnter(other: GameObject<SpaceInvaders>): void {
         if(other instanceof Player){
-            other.enableDoublePowerUp();
+
+            const newValue = other.shotNumber + this.increaseOf;
+        
+            if(newValue <= 8){
+                other.arShotNumberTimeouts.forEach(el => el.changeDelay(el.delay + this.duration))
+                other.shotNumber = newValue;
+                other.arShotNumberTimeouts.push(this.gameController.currentScene.setTimeout(() => other.shotNumber -= this.increaseOf, this.duration))
+            }
+            else{
+                other.arShotNumberTimeouts.forEach(el => this.gameController.currentScene.resetTimeout(el))
+            }
+
+
+            // other.enableMultiShotPowerUp(1, this.duration);
             this.gameController.playAudioOneShot("powerup.mp3")
             this.destroy();
+
         }
+        
     }
 
     public onLoad(): void {
