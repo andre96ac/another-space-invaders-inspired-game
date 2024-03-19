@@ -1,5 +1,5 @@
 {
-  "name": "spaceinvaders",
+  "name": "another-space-invaders-inspired-game",
   "version": "1.0.0",
   "description": "A simple Space Invaders-style game written in js using canvas",
   "main": "index.js",
