@@ -10,7 +10,7 @@ Simply another SpaceInvaders-inspired game!
 <br>
 <br>
 
-Written in pure vanilla Javascript using canvas 2d api... 
+Written in pure vanilla Typescript using canvas 2d api... 
 - **NO Unity**
 - **NO Libraries**
 - **NO Useless tools**
