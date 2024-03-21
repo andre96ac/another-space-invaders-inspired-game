@@ -2,6 +2,10 @@
 
 Simply another SpaceInvaders-inspired game!
 
+*Play on <a href="https://andre96ac.itch.io/another-spaceinvaders-inspired-game">itch.io</a>*
+
+
+
 <br>
 
 <img src="./src/assets/screenshot.png">
