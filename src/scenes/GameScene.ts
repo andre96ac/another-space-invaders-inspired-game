@@ -175,6 +175,14 @@ export class GameScene extends Scene<SpaceInvaders>{
         
         
         this.registerKeyDownListener('p', () => this.gameController.paused? this.gameController.resume() : this.gameController.pause())
+
+
+
+        //mobile
+        this.gameController.uiCanvas.addEventListener("touchmove", (ev) => {
+            console.log(ev);
+            this.player1?.moveAtCentre(Vector2.create(ev.changedTouches[0].clientX, this.player1.center.y))
+        })
     }
 
     /**
