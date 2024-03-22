@@ -17,6 +17,11 @@ export class MenuScene extends Scene<SpaceInvaders>{
         return super.onUpdate(timestamp)
     }
     public onLoad() {
+
+        const ratioX = this.gameController.currentRatio.x;
+        const ratioY = this.gameController.currentRatio.y;
+
+
         this.gameController.clearContext("background")
 
 
@@ -25,32 +30,32 @@ export class MenuScene extends Scene<SpaceInvaders>{
         const button1 = this.istantiateEl(Button);
         button1.innerText = "1 Player";
         button1.font = "Tahoma";
-        button1.fontSize = 30;
+        button1.fontSize = 30* Math.min(ratioX, ratioY);
         button1.color = "rgb(102, 0, 255)"
-        button1.size = Vector2.create(400, 100);
-        button1.lineWidth = 4;
-        button1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 50))
+        button1.size = Vector2.create(400* ratioX, 100* ratioY);
+        button1.lineWidth = 4 ;
+        button1.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 50*ratioY))
         button1.onMouseClick = (ev: MouseEvent) => {this.gameController.playerNumber = 1; this.gameController.loadScene(GameScene)}
 
 
         const button2 = this.istantiateEl(Button);
         button2.innerText = "2 Players";
         button2.font = "Tahoma";
-        button2.fontSize = 30;
+        button2.fontSize = 30* Math.min(ratioX, ratioY);
         button2.color = "rgb(102, 0, 255)"
-        button2.size = Vector2.create(300, 50);
+        button2.size = Vector2.create(300 * ratioX, 50 * ratioY);
         button2.lineWidth = 4;
-        button2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 200))
+        button2.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + 200 * ratioY))
         button2.onMouseClick = (ev: MouseEvent) => {this.gameController.playerNumber = 2; this.gameController.loadScene(GameScene)}
 
         const title = this.istantiateEl(Text)
         title.innerText = "Space Invaders";
         title.font = "Tahoma";
-        title.fontSize = 90;
+        title.fontSize = 90* Math.min(ratioX, ratioY);
         title.color = "rgb(102, 0, 255)"
-        title.lineWidth = 4;
+        title.lineWidth = 4 * Math.min(ratioX, ratioY);
         title.outline = true;
-        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 150))
+        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 150 * ratioY))
         
         
         const box = this.istantiateEl(Primitive)

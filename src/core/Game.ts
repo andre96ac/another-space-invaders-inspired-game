@@ -32,6 +32,21 @@ export abstract class Game{
     public get uiContext(){ return this._uiContext}; 
 
 
+    public  stdWidth: number | undefined;
+    public  stdHeight: number | undefined;
+
+    public get currentRatio(): {x: number, y: number}{
+        if(!!this.stdHeight && !! this.stdWidth)
+        return{
+            x: this.mainCanvas.width / this.stdWidth,
+            y: this.mainCanvas.height / this.stdHeight
+        }
+        else{
+            throw Error("Unable to access currentRatio: stdHeight or stdWidth not setted")
+        }
+    }
+
+
     
     //Current Scene
     private _currentScene: Scene<typeof this> | undefined;

@@ -25,6 +25,9 @@ export class DeathScene extends Scene<SpaceInvaders>{
     }
     public onLoad() {
 
+        const ratioX = this.gameController.currentRatio.x;
+        const ratioY = this.gameController.currentRatio.y;
+
         this.gameController.clearContext("background")
 
         const bestScore: number = parseInt(localStorage.getItem(this.storageBestKey)?? "");
@@ -46,30 +49,30 @@ export class DeathScene extends Scene<SpaceInvaders>{
         const button = this.istantiateEl(Button);
         button.innerText = "Main Menu";
         button.font = "Tahoma";
-        button.fontSize = 30;
+        button.fontSize = 30 * Math.min(ratioX, ratioY);
         button.color = "rgb(102, 0, 255)"
-        button.size = Vector2.create(400, 50);
+        button.size = Vector2.create(400 * ratioX, 50 * ratioY);
         button.lineWidth = 4;
-        button.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + (isBestScore? 100 : 200)))
+        button.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2 + (isBestScore? 100*ratioY: 200* ratioY)))
         button.onMouseClick = (ev: MouseEvent) => {this.gameController.loadScene(MenuScene)}
 
         const title = this.istantiateEl(Text)
         title.innerText = isBestScore? "New Best!" : "You Died!";
         title.font = "Tahoma";
-        title.fontSize = 90;
+        title.fontSize = 90 *Math.min(ratioX, ratioY);
         title.color = "rgb(102, 0, 255)"
-        title.lineWidth = 4;
+        title.lineWidth = 4* Math.min(ratioX, ratioY);
         title.outline = true;
-        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 200))
+        title.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 200* ratioY))
         
         const points = this.istantiateEl(Text);
         points.innerText = `${this.gameController.killCount}`;
         points.font = "Tahoma";
-        points.fontSize = 120;
+        points.fontSize = 120*Math.min(ratioX, ratioY);
         points.color = "rgb(102, 0, 255)"
-        points.lineWidth = 4;
+        points.lineWidth = 4* Math.min(ratioX, ratioY);
         points.outline = true;
-        points.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 70))
+        points.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2- 70* ratioY))
         
         
         
@@ -80,11 +83,11 @@ export class DeathScene extends Scene<SpaceInvaders>{
             const best = this.istantiateEl(Text);
             best.innerText = `Best Score: ${bestScore}`;
             best.font = "Tahoma";
-            best.fontSize = 70;
+            best.fontSize = 70 *Math.min(ratioX, ratioY);
             best.color = "rgb(102, 0, 255)"
-            best.lineWidth = 3;
+            best.lineWidth = 3* Math.min(ratioX, ratioY);
             best.outline = true;
-            best.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2+50))
+            best.moveAtCentre(Vector2.create(this.gameController.mainCanvas.width/2, this.gameController.mainCanvas.height/2+50* ratioY))
 
         }
     }

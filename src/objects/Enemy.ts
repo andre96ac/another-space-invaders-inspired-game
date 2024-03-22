@@ -19,7 +19,7 @@ export class Enemy extends GameObject<SpaceInvaders>{
         const center = this.center;
         let size = this.currentHealth / this.maxHealth * 20
         size += 20;
-        this.size = Vector2.create(size, size);
+        this.size = Vector2.create(size * this.gameController.currentRatio.x, size * this.gameController.currentRatio.y);
         this.moveAtCentre(center);
 
     }
@@ -35,9 +35,9 @@ export class Enemy extends GameObject<SpaceInvaders>{
 
     
     constructor(gameController: SpaceInvaders){
-        const enemySize: Vector2 = Vector2.create(40, 40);
+        const enemySize: Vector2 = Vector2.create(40 *gameController.currentRatio.x, 40 *gameController.currentRatio.y);
         super(gameController, "rectangle", Vector2.zero, enemySize);
-        this._enemyStep = this.size.x + 20
+        this._enemyStep = this.size.x + 20 * gameController.currentRatio.y
         this.collidable = true;
         this.color = "#00c0b7";
         this.lineWidth = 2

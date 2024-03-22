@@ -14,6 +14,9 @@ export class SpaceInvaders extends Game{
     }
     public onStart(): void {
 
+        this.stdHeight = 886;
+        this.stdWidth = 1000;
+
         this.loadAudioClips([
             "explosion.wav",
             "music.mp3",
